@@ -40,7 +40,7 @@ module.exports = function (grunt) {
 
     grunt.initConfig({
         "pkg":              grunt.file.readJSON("package.json"),
-        "config-json":      staging + "/www/config.json",
+        "config-json":      staging + "/www/package.json",
         "curl-dir": {
             /* linux */
             "cef-linux32": {
@@ -155,8 +155,8 @@ module.exports = function (grunt) {
                     {
                         "dot"       : true,
                         "expand"    : true,
-                        "cwd"       : "<%= git.www.repo %>/src",
-                        "src"       : ["**", "!**/.git*"],
+                        "cwd"       : "<%= git.www.repo %>",
+                        "src"       : ["package.json", "app/**", "assets/**", "index.html", "bower-mapping.js", "!**/.git*"],
                         "dest"      : "<%= build.staging %>/www/"
                     }
                 ]
@@ -186,13 +186,13 @@ module.exports = function (grunt) {
             }
         },
         "build": {
-            "name"              : "Brackets",
+            "name"              : "Flow",
             "staging"           : staging
         },
         "git": {
             "www": {
-                "repo"      : "../brackets",    // TODO user configurable?
-                "branch"    : grunt.option("www-branch") || ""
+                "repo"      : "../../../artlantic",    // TODO user configurable?
+                "branch"    : "development" || grunt.option("www-branch") || ""
             },
             "shell": {
                 "repo"      : ".",
