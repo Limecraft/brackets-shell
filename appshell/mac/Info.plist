@@ -9,7 +9,7 @@
 	<key>CFBundleIconFile</key>
 	<string>appshell.icns</string>
 	<key>CFBundleIdentifier</key>
-	<string>io.brackets.appshell</string>
+	<string>com.limecraft.flow.appshell</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
