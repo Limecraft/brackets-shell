@@ -17,8 +17,8 @@
     <String Id="LicenseRtf" Overridable="yes">EULA_en-us.rtf</String>   
 
     <!-- See also: product name definitions in brackets-win-install-build.xml -->
-    <String Id="ProductName">Brackets</String>
-    <String Id="ShortProductName">Brackets</String>
+    <String Id="ProductName">Limecraft Flow</String>
+    <String Id="ShortProductName">Flow</String>
   
     <String Id="LanguageID" Overridable="yes">1033</String>
         
