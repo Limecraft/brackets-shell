@@ -99,6 +99,7 @@ module.exports = function (grunt) {
                             "locales/**",
                             "node-core/**",
                             "Brackets.exe",
+							"Flow.exe",
                             "Brackets-node.exe",
                             "cef.pak",
                             "devtools_resources.pak",
