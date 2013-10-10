@@ -157,7 +157,14 @@ module.exports = function (grunt) {
                         "dot"       : true,
                         "expand"    : true,
                         "cwd"       : "<%= git.www.repo %>",
-                        "src"       : ["package.json", "app/**", "assets/**", "index.html", "bower-mapping.js", "!**/.git*"],
+                        "src"       : [
+                            "package.json",
+                            "app/**",
+                            "assets/**",
+                            "index.html",
+                            "bower-mapping.js",
+                            "!**/.git*"
+                        ],
                         "dest"      : "<%= build.staging %>/www/"
                     }
                 ]
