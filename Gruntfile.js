@@ -199,8 +199,8 @@ module.exports = function (grunt) {
         },
         "git": {
             "www": {
-                "repo"      : "../../../artlantic",    // TODO user configurable?
-                "branch"    : "development" || grunt.option("www-branch") || ""
+                "repo"      : grunt.option("www-repo") || "../artlantic",
+                "branch"    : grunt.option("www-branch") || "development"
             },
             "shell": {
                 "repo"      : ".",
