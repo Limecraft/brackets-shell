@@ -157,7 +157,7 @@ module.exports = function (grunt) {
                         "dot"       : true,
                         "expand"    : true,
                         "cwd"       : "<%= git.www.repo %>",
-                        "src"       : ["package.json", "app/**", "assets/**", "index.html", "bower-mapping.js", "!**/.git*"],
+                        "src"       : ["package.json", "src/**", "assets/**", "index.html", "bower-mapping.js", "!**/.git*"],
                         "dest"      : "<%= build.staging %>/www/"
                     }
                 ]
@@ -192,8 +192,8 @@ module.exports = function (grunt) {
         },
         "git": {
             "www": {
-                "repo"      : "../../../artlantic",    // TODO user configurable?
-                "branch"    : "development" || grunt.option("www-branch") || ""
+                "repo"      : grunt.option("www-repo") || "../../../components/local-client-js",    // TODO user configurable?
+                "branch"    : grunt.option("www-branch") || "development"
             },
             "shell": {
                 "repo"      : ".",
