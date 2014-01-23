@@ -204,7 +204,7 @@ module.exports = function (grunt) {
         },
         "git": {
             "www": {
-                "repo"      : grunt.option("www-repo") || "../../../components/local-client-js",    // TODO user configurable?
+                "repo"      : grunt.option("www-repo") || "../local-client-js",    // TODO user configurable?
                 "branch"    : grunt.option("www-branch") || "development"
             },
             "shell": {
@@ -222,7 +222,7 @@ module.exports = function (grunt) {
             "version"       : "1.2.11"
         },
         "limecraft-node": {
-            "repo": grunt.option("limecraft-node-repo") || "../../../../barracuda"
+            "repo": grunt.option("limecraft-node-repo") || "../barracuda"
         }
     });
 
