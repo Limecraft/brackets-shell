@@ -302,7 +302,7 @@ module.exports = function (grunt) {
             sprint = semver.parse(grunt.config("pkg").version).minor;
         
         spawn(["bash build_installer.sh"], { cwd: resolve("installer/linux"), env: getBracketsEnv() }).then(function () {
-            return common.rename("installer/linux/brackets.deb", "installer/linux/Brackets Sprint " + sprint + " " + common.arch() + "-bit.deb");
+            return common.rename("installer/linux/brackets.deb", "installer/linux/Brackets alpha " + sprint + " " + common.arch() + "-bit.deb");
         }).then(function () {
             done();
         }, function (err) {

@@ -79,7 +79,7 @@ module.exports = function (grunt) {
         text = grunt.file.read(buildInstallerScriptPath);
         text = safeReplace(
             text,
-            /(Brackets Sprint )([0-9]+)/,
+            /(Flow alpha )([0-9]+)/,
             "$1" + sprint
         );
         grunt.file.write(buildInstallerScriptPath, text);
@@ -102,7 +102,7 @@ module.exports = function (grunt) {
         );
         text = safeReplace(
             text,
-            /(Sprint )([0-9]+)/,
+            /(alpha )([0-9]+)/,
             "$1" + sprint
         );
         grunt.file.write(versionRcPath, text);

@@ -1,7 +1,7 @@
 #!/bin/bash 
 
 # config
-releaseName="Flow"
+releaseName="Flow alpha 1"
 format="bzip2"
 encryption="none"
 tmpLayout="./dropDmgConfig/layouts/tempLayout"
