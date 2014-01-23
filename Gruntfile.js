@@ -179,6 +179,11 @@ module.exports = function (grunt) {
                         "dest"      : "<%= build.staging %>/samples/"
                     }
                 ]
+            },
+            "limecraft-node-backup": {
+                files: [
+                    {src: ["appshell/node-core/**"], dest: "appshell/node-core-backup", expand: true}
+                ]
             }
         },
         "unzip": {
