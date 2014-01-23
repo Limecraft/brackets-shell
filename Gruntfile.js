@@ -220,6 +220,9 @@ module.exports = function (grunt) {
         },
         "npm": {
             "version"       : "1.2.11"
+        },
+        "limecraft-node": {
+            "repo": grunt.option("limecraft-node-repo") || "../../../../barracuda"
         }
     });
 
@@ -229,5 +232,5 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks("grunt-contrib-clean");
     grunt.loadNpmTasks("grunt-curl");
 
-    grunt.registerTask("default", ["setup", "build"]);
+    grunt.registerTask("default", ["limecraft-node", "setup", "build"]);
 };
