@@ -58,3 +58,6 @@ appshell/gtk
 appshell/gtk/*
 
 appshell/node-core/node_modules
+
+.idea
+atlassian-ide-plugin.xml
