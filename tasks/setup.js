@@ -62,8 +62,17 @@ module.exports = function (grunt) {
     }());
     
     function unzip(src, dest) {
+		var command;
         grunt.verbose.writeln("Extracting " + src);
-        return exec("unzip -q " + src + " -d " + dest);
+		
+		command = "unzip -q " + src + " -d " + dest;
+		if (platform === "win") {
+			command = "7za x -o" + dest + " " + src;
+		}
+
+		grunt.log.writeln(command);
+		
+        return exec(command);
     }
 
     // task: cef
