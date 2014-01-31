@@ -100,7 +100,7 @@ module.exports = function (grunt) {
                             "node-core/**",
                             "Brackets.exe",
 							"Flow.exe",
-                            "Brackets-node.exe",
+                            "node.exe",
                             "cef.pak",
                             "devtools_resources.pak",
                             "icudt.dll",
@@ -134,7 +134,7 @@ module.exports = function (grunt) {
                             "node-core/**",
                             "appshell*.png",
                             "Brackets",
-                            "Brackets-node",
+                            "node",
                             "cef.pak",
                             "devtools_resources.pak"
                         ],

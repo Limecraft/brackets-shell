@@ -103,7 +103,7 @@
             {
               # Copy node executable to the output directory
               'destination': '<(PRODUCT_DIR)',
-              'files': ['deps/node/Brackets-node.exe'],
+              'files': ['deps/node/node.exe'],
             },
             {
               # Copy node server files to the output directory
@@ -180,8 +180,8 @@
               'postbuild_name': 'Copy node executable',
               'action': [
                 'cp',
-                './deps/node/bin/Brackets-node',
-                '${BUILT_PRODUCTS_DIR}/${EXECUTABLE_FOLDER_PATH}/Brackets-node',
+                './deps/node/bin/node',
+                '${BUILT_PRODUCTS_DIR}/${EXECUTABLE_FOLDER_PATH}/node',
               ],
             },
             {
@@ -264,7 +264,7 @@
             {
               # Copy node executable to the output directory
               'destination': '<(PRODUCT_DIR)',
-              'files': ['deps/node/bin/Brackets-node'],
+              'files': ['deps/node/bin/node'],
             },
             {
               # Copy node server files to the output directory

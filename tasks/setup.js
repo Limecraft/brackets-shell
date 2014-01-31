@@ -256,7 +256,7 @@ module.exports = function (grunt) {
         grunt.file.mkdir("deps/node");
         
         // copy node.exe to Brackets-node
-        grunt.file.copy(exeFile,  "deps/node/Brackets-node.exe");
+        grunt.file.copy(exeFile,  "deps/node/node.exe");
         
         // unzip NPM
         unzip(npmFile, "deps/node").then(function () {
@@ -292,7 +292,7 @@ module.exports = function (grunt) {
             // for npm to function properly, but we want to call the executable "Brackets-node"
             // in the final binary. Due to gyp's limited nature, we can't (easily) do this rename
             // as part of the build process.
-            return rename("deps/node/bin/node", "deps/node/bin/Brackets-node");
+            return rename("deps/node/bin/node", "deps/node/bin/node");
         }).then(function () {
             nodeWriteVersion();
             done();
