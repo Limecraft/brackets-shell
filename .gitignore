@@ -58,6 +58,7 @@ appshell/gtk
 appshell/gtk/*
 
 appshell/node-core/node_modules
+appshell/node-core
 
 .idea
 atlassian-ide-plugin.xml
