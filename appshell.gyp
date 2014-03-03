@@ -154,6 +154,18 @@
             },
           ],
           'postbuilds': [
+            # Codesign the CEF framework component
+            {
+              'postbuild_name': 'Codesign CEFramework',
+              'action': [
+                'codesign',
+                '--verbose',
+                '--force',
+                '--sign',
+                '<(signer)',
+                '${BUILT_PRODUCTS_DIR}/${FRAMEWORKS_FOLDER_PATH}/Chromium Embedded Framework.framework'
+              ],
+            },
             {
               'postbuild_name': 'Fix Framework Link',
               'action': [
@@ -174,6 +186,18 @@
                 '-a',
                 './appshell/node-core/',
                 '${BUILT_PRODUCTS_DIR}/${EXECUTABLE_FOLDER_PATH}/../node-core/',
+              ],
+            },
+            # Codesign the node executable
+            {
+              'postbuild_name': 'Codesign node',
+              'action': [
+                'codesign',
+                '--verbose',
+                '--force',
+                '--sign',
+                '<(signer)',
+                '${BUILT_PRODUCTS_DIR}/${EXECUTABLE_FOLDER_PATH}/node'
               ],
             },
             {
@@ -198,6 +222,40 @@
                 'tools/make_more_helpers.sh',
                 'Frameworks',
                 '<(appname)',
+              ],
+            },
+            # Codesign the helpers
+            {
+              'postbuild_name': 'Codesign Flow Helper',
+              'action': [
+                'codesign',
+                '--verbose',
+                '--force',
+                '--sign',
+                '<(signer)',
+                '${BUILT_PRODUCTS_DIR}/${FRAMEWORKS_FOLDER_PATH}/Flow Helper.app'
+              ],
+            },
+            {
+              'postbuild_name': 'Codesign Flow Helper EH',
+              'action': [
+                'codesign',
+                '--verbose',
+                '--force',
+                '--sign',
+                '<(signer)',
+                '${BUILT_PRODUCTS_DIR}/${FRAMEWORKS_FOLDER_PATH}/Flow Helper EH.app'
+              ],
+            },
+            {
+              'postbuild_name': 'Codesign Flow Helper NP',
+              'action': [
+                'codesign',
+                '--verbose',
+                '--force',
+                '--sign',
+                '<(signer)',
+                '${BUILT_PRODUCTS_DIR}/${FRAMEWORKS_FOLDER_PATH}/Flow Helper NP.app'
               ],
             },
           ],
