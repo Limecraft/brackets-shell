@@ -193,6 +193,14 @@
                 '${BUILT_PRODUCTS_DIR}/${EXECUTABLE_FOLDER_PATH}/../node-core/',
               ],
             },
+            {
+              'postbuild_name': 'Copy node executable',
+              'action': [
+                'cp',
+                './deps/node/bin/node',
+                '${BUILT_PRODUCTS_DIR}/${EXECUTABLE_FOLDER_PATH}/node',
+              ],
+            },
             # Codesign the node executable
             {
               'postbuild_name': 'Codesign node',
@@ -203,14 +211,6 @@
                 '--sign',
                 '<(signer)',
                 '${BUILT_PRODUCTS_DIR}/${EXECUTABLE_FOLDER_PATH}/node'
-              ],
-            },
-            {
-              'postbuild_name': 'Copy node executable',
-              'action': [
-                'cp',
-                './deps/node/bin/node',
-                '${BUILT_PRODUCTS_DIR}/${EXECUTABLE_FOLDER_PATH}/node',
               ],
             },
             {
