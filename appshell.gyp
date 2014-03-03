@@ -68,6 +68,9 @@
         'SYMROOT': 'xcodebuild',
         'GCC_TREAT_WARNINGS_AS_ERRORS': 'NO',
         'GCC_VERSION': 'com.apple.compilers.llvm.clang.1_0',
+        # code signing
+        'CODE_SIGN_IDENTITY': 'Developer ID Application',
+        'CODE_SIGN_IDENTITY[sdk=macosx*]': '<(signer)',
       },
       'conditions': [
         ['OS=="win"', {
@@ -443,6 +446,9 @@
             'SYMROOT': 'xcodebuild',
             'GCC_TREAT_WARNINGS_AS_ERRORS': 'NO',
             'GCC_VERSION': 'com.apple.compilers.llvm.clang.1_0',
+            # code signing
+            'CODE_SIGN_IDENTITY': 'Developer ID Application',
+            'CODE_SIGN_IDENTITY[sdk=macosx*]': '<(signer)'
           },
           'postbuilds': [
             {
