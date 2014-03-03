@@ -71,6 +71,8 @@
         # code signing
         'CODE_SIGN_IDENTITY': 'Developer ID Application',
         'CODE_SIGN_IDENTITY[sdk=macosx*]': '<(signer)',
+        # Necessary to avoid warning "skipping copy phase strip, binary is code signed"
+        'COPY_PHASE_STRIP': 'NO',
       },
       'conditions': [
         ['OS=="win"', {
@@ -448,7 +450,9 @@
             'GCC_VERSION': 'com.apple.compilers.llvm.clang.1_0',
             # code signing
             'CODE_SIGN_IDENTITY': 'Developer ID Application',
-            'CODE_SIGN_IDENTITY[sdk=macosx*]': '<(signer)'
+            'CODE_SIGN_IDENTITY[sdk=macosx*]': '<(signer)',
+            # Necessary to avoid warning "skipping copy phase strip, binary is code signed"
+            'COPY_PHASE_STRIP': 'NO',
           },
           'postbuilds': [
             {
