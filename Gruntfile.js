@@ -223,6 +223,9 @@ module.exports = function (grunt) {
         },
         "limecraft-node": {
             "repo": grunt.option("limecraft-node-repo") || "../barracuda"
+        },
+        "limecraft-release-node": {
+            "repo": grunt.option("limecraft-node-repo") || "../barracuda"
         }
     });
 
