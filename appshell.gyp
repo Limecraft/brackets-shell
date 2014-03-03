@@ -381,6 +381,8 @@
         '<@(libcef_dll_wrapper_sources_common)',
       ],
       'xcode_settings': {
+        # Added Info.plist for cef
+        'INFOPLIST_FILE': 'appshell/mac/cef-Info.plist',
         # Target build path.
         'SYMROOT': 'xcodebuild',
         'GCC_TREAT_WARNINGS_AS_ERRORS': 'NO',
