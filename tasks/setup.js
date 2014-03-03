@@ -94,7 +94,7 @@ module.exports = function (grunt) {
         
         // optionally download if CEF is not found
         if (!grunt.file.exists("deps/cef/" + txtName)) {
-            var cefTasks = ["cef-clean", "cef-extract", "cef-symlinks"];
+            var cefTasks = ["cef-clean", "cef-extract", "cef-symlinks", "cef-plist"];
             
             if (grunt.file.exists(zipDest)) {
                 grunt.verbose.writeln("Found CEF download " + zipDest);
@@ -197,7 +197,15 @@ module.exports = function (grunt) {
             done(false);
         });
     });
-    
+
+    // strange hack in which we copy Info.plist for cef framework, otherwise
+    // build keeps failing
+    grunt.registerTask("cef-plist", "info.plist for cef", function () {
+        if (platform === "mac") {
+            grunt.file.copy("appshell/mac/cef-Info.plist",  "deps/cef/Resources/Info.plist");
+        }
+    });
+
     // task: node-download
     grunt.registerTask("node", "Download Node.js binaries and setup dependencies", function () {
         var config      = "node-" + platform + common.arch(),
