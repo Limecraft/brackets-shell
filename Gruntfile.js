@@ -28,6 +28,7 @@ module.exports = function (grunt) {
     var common  = require("./tasks/common")(grunt),
         resolve = common.resolve,
         platform = common.platform(),
+        _ = grunt.util._,
         staging;
     
     if (platform === "mac") {
@@ -234,6 +235,26 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks("grunt-contrib-copy");
     grunt.loadNpmTasks("grunt-contrib-clean");
     grunt.loadNpmTasks("grunt-curl");
+
+    grunt.registerTask('configure-barracuda', "Configure barracuda", function () {
+        var configFile = grunt.option["barracuda-config-file"] || "appshell/node-core/config/default.json",
+            json = grunt.file.readJSON(configFile);
+
+        _.each([
+            "backend",
+            "contentRoot",
+            "debug",
+            "refreshRate",
+            "numberTranscoders",
+            "numberProbes",
+            "isBrackets",
+            "build_no",
+            "ignoredrives"
+        ], function (key) {
+            json[key] = grunt.option("barracuda-" + key) || json[key];
+        });
+        grunt.file.write(configFile, JSON.stringify(json, undefined, 4));
+    });
 
     grunt.registerTask("default", ["limecraft-node", "setup", "build"]);
 };
