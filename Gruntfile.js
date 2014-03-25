@@ -249,7 +249,8 @@ module.exports = function (grunt) {
             "numberProbes",
             "isBrackets",
             "build_no",
-            "ignoredrives"
+            "ignoredrives",
+            "skip_proxyengine"
         ], function (key) {
             json[key] = grunt.option("barracuda-" + key) || json[key];
         });
