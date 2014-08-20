@@ -1,7 +1,8 @@
 #!/bin/bash 
 
 # config
-releaseName="Flow alpha 1"
+releaseName="Flow"
+dmgName="${releaseName} alpha 1"
 format="bzip2"
 encryption="none"
 tmpLayout="./dropDmgConfig/layouts/tempLayout"
@@ -42,7 +43,7 @@ fi
 
 # build the DMG
 echo "building DMG..."
-dropdmg ./$tempDir --format $format --encryption $encryption $customIcon --layout-folder "$tmpLayout" $customLicense --volume-name "$releaseName" --base-name "$releaseName"
+dropdmg ./$tempDir --format $format --encryption $encryption $customIcon --layout-folder "$tmpLayout" $customLicense --volume-name "$dmgName" --base-name "$dmgName"
 
 # clean up
 rm -rf $tempDir
