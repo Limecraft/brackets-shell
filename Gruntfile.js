@@ -115,7 +115,12 @@ module.exports = function (grunt) {
                             "cef.pak",
                             "devtools_resources.pak",
                             "icudt.dll",
-                            "libcef.dll"
+                            "libcef.dll",
+
+                            //Limecraft custom: extra necessary libs
+                            "avcodec-55.dll",
+                            "avformat-55.dll",
+                            "avutil-52.dll"
                         ],
                         "dest"      : "installer/win/staging/"
                     }
