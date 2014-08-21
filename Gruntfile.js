@@ -118,6 +118,7 @@ module.exports = function (grunt) {
                             "libcef.dll",
 
                             //Limecraft custom: extra necessary libs
+                            "ffmpegsumo.dll",
                             "avcodec-55.dll",
                             "avformat-55.dll",
                             "avutil-52.dll"
