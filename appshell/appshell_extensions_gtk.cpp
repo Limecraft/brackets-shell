@@ -62,15 +62,24 @@ int GErrorToErrorCode(GError *gerror) {
 
 int32 OpenLiveBrowser(ExtensionString argURL, bool enableRemoteDebugging)
 {
-    const char *remoteDebuggingFormat = "--no-first-run --no-default-browser-check --allow-file-access-from-files --remote-debugging-port=9222";
+    const char *remoteDebuggingFormat = "--no-first-run --no-default-browser-check --allow-file-access-from-files --temp-profile --user-data-dir=%s --remote-debugging-port=9222";
     gchar *remoteDebugging;
     gchar *cmdline;
     int error = ERR_BROWSER_NOT_INSTALLED;
     GError *gerror = NULL;
     
     if (enableRemoteDebugging) {
-        // FIXME Should we mimic windows? user-data-dir=ClientApp::AppGetSupportDirectory()
-        remoteDebugging = g_strdup(remoteDebuggingFormat);
+        CefString appSupportDirectory = ClientApp::AppGetSupportDirectory();
+
+        // TODO: (INGO) to better understand to string conversion issue, I need a consultant
+        // here. Getting the char* from CefString I had to call ToString().c_str()
+        // Calling only c_str() didn't return anything.
+        gchar *userDataDir = g_strdup_printf("%s/live-dev-profile",
+                                        appSupportDirectory.ToString().c_str());  
+        g_message("USERDATADIR= %s", userDataDir);
+        remoteDebugging = g_strdup_printf(remoteDebuggingFormat, userDataDir);
+        
+        g_free(userDataDir);
     } else {
         remoteDebugging = g_strdup("");
     }
@@ -84,13 +93,15 @@ int32 OpenLiveBrowser(ExtensionString argURL, bool enableRemoteDebugging)
             error = NO_ERROR;
         } else {
             error = ConvertGnomeErrorCode(gerror);
-            g_error_free(gerror);
         }
 
         g_free(cmdline);
         
         if (error == NO_ERROR) {
             break;
+        } else {
+            g_error_free(gerror);
+            gerror = NULL;
         }
     }
     
@@ -216,6 +227,8 @@ int32 ReadDir(ExtensionString path, CefRefPtr<CefListValue>& directoryContents)
 
     DIR *dp;
     struct dirent *files;
+    struct stat statbuf;
+    ExtensionString curFile;
     
     /*struct dirent
     {
@@ -234,10 +247,27 @@ int32 ReadDir(ExtensionString path, CefRefPtr<CefListValue>& directoryContents)
     {
         if(!strcmp(files->d_name,".") || !strcmp(files->d_name,".."))
             continue;
+        
         if(files->d_type==DT_DIR)
             resultDirs.push_back(ExtensionString(files->d_name));
         else if(files->d_type==DT_REG)
             resultFiles.push_back(ExtensionString(files->d_name));
+        else
+        {
+            // Some file systems do not support d_type we use
+            // for faster type detection. So on these file systems
+            // we may get DT_UNKNOWN for all file entries, but just  
+            // to be safe we will use slower stat call for all 
+            // file entries that are not DT_DIR or DT_REG.
+            curFile = path + files->d_name;
+            if(stat(curFile.c_str(), &statbuf) == -1)
+                continue;
+        
+            if(S_ISDIR(statbuf.st_mode))
+                resultDirs.push_back(ExtensionString(files->d_name));
+            else if(S_ISREG(statbuf.st_mode))
+                resultFiles.push_back(ExtensionString(files->d_name));
+        }
     }
 
     closedir(dp);
@@ -269,6 +299,7 @@ int32 MakeDir(ExtensionString path, int mode)
     if (!g_file_make_directory(file, NULL, &gerror)) {
         error = GErrorToErrorCode(gerror);
     }
+    g_object_unref(file);
 
     return error;
 }
@@ -286,7 +317,7 @@ int Rename(ExtensionString oldName, ExtensionString newName)
     }
 }
 
-int GetFileModificationTime(ExtensionString filename, uint32& modtime, bool& isDir)
+int GetFileInfo(ExtensionString filename, uint32& modtime, bool& isDir, double& size, ExtensionString& realPath)
 {
     struct stat buf;
     if(stat(filename.c_str(),&buf)==-1)
@@ -294,9 +325,58 @@ int GetFileModificationTime(ExtensionString filename, uint32& modtime, bool& isD
 
     modtime = buf.st_mtime;
     isDir = S_ISDIR(buf.st_mode);
-
+    size = (double)buf.st_size;
+    
+    // TODO: Implement realPath. If "filename" is a symlink, realPath should be the actual path
+    // to the linked object.
+    realPath = "";
+    
     return NO_ERROR;
 }
+
+const int utf8_BOM_Len = 3;
+const int utf16_BOM_Len = 2;
+const int utf32_BOM_Len = 4;
+
+bool has_utf8_BOM(gchar* data, gsize length)
+{
+    return ((length >= utf8_BOM_Len) &&
+                (data[0] == (gchar)0xEF) && (data[1] == (gchar)0xBB) && (data[2] == (gchar)0xBF));
+}
+
+bool has_utf16be_BOM(gchar* data, gsize length)
+{
+    return ((length >= utf16_BOM_Len) && (data[0] == (gchar)0xFE) && (data[1] == (gchar)0xFF));
+}
+
+bool has_utf16le_BOM(gchar* data, gsize length)
+{
+    return ((length >= utf16_BOM_Len) && (data[0] == (gchar)0xFF) && (data[1] == (gchar)0xFE));
+}
+
+bool has_utf32be_BOM(gchar* data, gsize length)
+{
+    return ((length >=  utf32_BOM_Len) &&
+             (data[0] == (gchar)0x00) && (data[1] == (gchar)0x00) &&
+             (data[2] == (gchar)0xFE) && (data[3] == (gchar)0xFF));
+}
+
+bool has_utf32le_BOM(gchar* data, gsize length)
+{
+   return ((length >=  utf32_BOM_Len) &&
+             (data[0] == (gchar)0xFE) && (data[1] == (gchar)0xFF) &&
+             (data[2] == (gchar)0x00) && (data[3] == (gchar)0x00));
+}
+
+
+bool has_utf16_32_BOM(gchar* data, gsize length) 
+{
+    return (has_utf32be_BOM(data ,length) ||
+            has_utf32le_BOM(data ,length) ||
+            has_utf16be_BOM(data ,length) ||
+            has_utf16le_BOM(data ,length) );
+}
+
 
 int ReadFile(ExtensionString filename, ExtensionString encoding, std::string& contents)
 {
@@ -311,17 +391,26 @@ int ReadFile(ExtensionString filename, ExtensionString encoding, std::string& co
     
     if (!g_file_get_contents(filename.c_str(), &file_get_contents, &len, &gerror)) {
         error = GErrorToErrorCode(gerror);
-
         if (error == ERR_NOT_FILE) {
             error = ERR_CANT_READ;
         }
     } else {
-        contents.assign(file_get_contents, len);
+        if (has_utf16_32_BOM(file_get_contents, len)) {
+            error = ERR_UNSUPPORTED_ENCODING;
+        } else  if (has_utf8_BOM(file_get_contents, len)) {
+            contents.assign(file_get_contents + utf8_BOM_Len, len);        
+        } else if (!g_locale_to_utf8(file_get_contents, -1, NULL, NULL, &gerror)) {
+            error = ERR_UNSUPPORTED_ENCODING;
+        } else {
+            contents.assign(file_get_contents, len);
+        }
         g_free(file_get_contents);
     }
 
     return error;
 }
+
+
 
 int32 WriteFile(ExtensionString filename, std::string contents, ExtensionString encoding)
 {
@@ -335,8 +424,16 @@ int32 WriteFile(ExtensionString filename, std::string contents, ExtensionString 
         return ERR_CANT_WRITE;
     }
     
-    if (!g_file_set_contents(filenameStr, contents.c_str(), contents.length(), &gerror)) {
-        error = GErrorToErrorCode(gerror);
+    FILE* file = fopen(filenameStr, "w");
+    if (file) {
+        size_t size = fwrite(contents.c_str(), sizeof(gchar), contents.length(), file);
+        if (size != contents.length()) {
+            error = ERR_CANT_WRITE;
+        }
+
+        fclose(file);
+    } else {
+        return ConvertLinuxErrorCode(errno);
     }
 
     return error;
@@ -565,7 +662,7 @@ GtkWidget* GetMenuBar(CefRefPtr<CefBrowser> browser)
     for(iter = children; iter != NULL; iter = g_list_next(iter)) {
         widget = (GtkWidget*)iter->data;
 
-        if (GTK_IS_CONTAINER(widget))
+        if (GTK_IS_MENU_BAR(widget))
             return widget;
     }
 
@@ -587,6 +684,7 @@ int32 AddMenu(CefRefPtr<CefBrowser> browser, ExtensionString title, ExtensionStr
     GtkWidget* menuHeader = gtk_menu_item_new_with_label(title.c_str());
     gtk_menu_item_set_submenu(GTK_MENU_ITEM(menuHeader), menuWidget);
     gtk_menu_shell_append(GTK_MENU_SHELL(menuBar), menuHeader);
+    gtk_widget_show(menuHeader);
 
     // FIXME add lookup for menu widgets
     _menuWidget = menuWidget;
@@ -605,6 +703,7 @@ int32 AddMenuItem(CefRefPtr<CefBrowser> browser, ExtensionString parentCommand, 
     g_signal_connect(entry, "activate", FakeCallback, NULL);
     // FIXME add lookup for menu widgets
     gtk_menu_shell_append(GTK_MENU_SHELL(_menuWidget), entry);
+    gtk_widget_show(entry);
 
     return NO_ERROR;
 }

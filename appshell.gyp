@@ -1,4 +1,4 @@
-# Copyright (c) 2011 The Chromium Embedded Framework Authors. All rights
+ # Copyright (c) 2011 The Chromium Embedded Framework Authors. All rights
 # reserved. Use of this source code is governed by a BSD-style license that
 # can be found in the LICENSE file.
 
@@ -7,6 +7,9 @@
     'pkg-config': 'pkg-config',
     'target_arch%': 'environment',
     'chromium_code': 1,
+    'framework_name': 'Chromium Embedded Framework',
+    'linux_use_gold_binary': 0,
+    'linux_use_gold_flags': 0,
     'conditions': [
       [ 'OS=="mac"', {
         # Don't use clang with CEF binary releases due to Chromium tree structure dependency.
@@ -27,7 +30,11 @@
         'SDKROOT': '',
         'CLANG_CXX_LANGUAGE_STANDARD' : 'c++0x',
         'COMBINE_HIDPI_IMAGES': 'YES',
-        'ARCHS': "$(ARCHS_STANDARD_32_BIT)"
+        'ARCHS': "$(ARCHS_STANDARD_32_BIT)",
+        'FRAMEWORK_SEARCH_PATHS': [
+          '$(inherited)',
+          '$(CONFIGURATION)'
+        ]
       },
   },
   'targets': [
@@ -100,6 +107,10 @@
               '-l$(ConfigurationName)/libcef.lib'
             ],
           },
+          'library_dirs': [
+            # Needed to find cef_sandbox.lib using #pragma comment(lib, ...).
+            '$(ConfigurationName)',
+          ],
           'sources': [
             '<@(includes_win)',
             '<@(appshell_sources_win)',
@@ -138,20 +149,6 @@
           'copies': [
             {
               # Add library dependencies to the bundle.
-              'destination': '<(PRODUCT_DIR)/<(appname).app/Contents/Frameworks/Chromium Embedded Framework.framework/Libraries/',
-              'files': [
-                '$(CONFIGURATION)/libcef.dylib',
-              ],
-            },
-            {
-              # Add other resources to the bundle.
-              'destination': '<(PRODUCT_DIR)/<(appname).app/Contents/Frameworks/Chromium Embedded Framework.framework/',
-              'files': [
-                'Resources/',
-              ],
-            },
-            {
-              # Add the helper app.
               'destination': '<(PRODUCT_DIR)/<(appname).app/Contents/Frameworks',
               'files': [
                 '<(PRODUCT_DIR)/<(appname) Helper.app',
@@ -172,12 +169,21 @@
               ],
             },
             {
+             'postbuild_name': 'Add framework',
+              'action': [
+                'cp',
+                '-Rf',
+                '${CONFIGURATION}/<(framework_name).framework',
+                '${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.app/Contents/Frameworks/'
+              ],
+            },
+            {
               'postbuild_name': 'Fix Framework Link',
               'action': [
                 'install_name_tool',
                 '-change',
-                '@executable_path/libcef.dylib',
-                '@executable_path/../Frameworks/Chromium Embedded Framework.framework/Libraries/libcef.dylib',
+                '@executable_path/<(framework_name)',
+                '@executable_path/../Frameworks/<(framework_name).framework/<(framework_name)',
                 '${BUILT_PRODUCTS_DIR}/${EXECUTABLE_PATH}'
               ],
             },
@@ -267,7 +273,9 @@
           'link_settings': {
             'libraries': [
               '$(SDKROOT)/System/Library/Frameworks/AppKit.framework',
-              '$(CONFIGURATION)/libcef.dylib',
+              '$(SDKROOT)/System/Library/Frameworks/Foundation.framework',
+              '$(SDKROOT)/System/Library/Frameworks/ScriptingBridge.framework',
+              '$(CONFIGURATION)/<(framework_name).framework/<(framework_name)',
             ],
           },
           'sources': [
@@ -422,7 +430,9 @@
           'link_settings': {
             'libraries': [
               '$(SDKROOT)/System/Library/Frameworks/AppKit.framework',
-              '$(CONFIGURATION)/libcef.dylib',
+              '$(SDKROOT)/System/Library/Frameworks/Foundation.framework',
+              '$(SDKROOT)/System/Library/Frameworks/ScriptingBridge.framework',
+              '$(CONFIGURATION)/<(framework_name).framework/<(framework_name)',
             ],
           },
           'sources': [
@@ -453,6 +463,10 @@
             'CODE_SIGN_IDENTITY[sdk=macosx*]': '<(signer)',
             # Necessary to avoid warning "skipping copy phase strip, binary is code signed"
             'COPY_PHASE_STRIP': 'NO',
+            'FRAMEWORK_SEARCH_PATHS': [
+              '$(inherited)',
+              '$(CONFIGURATION)'
+            ]
           },
           'postbuilds': [
             {
@@ -464,8 +478,8 @@
               'action': [
                 'install_name_tool',
                 '-change',
-                '@executable_path/libcef.dylib',
-                '@executable_path/../../../../Frameworks/Chromium Embedded Framework.framework/Libraries/libcef.dylib',
+                '@executable_path/<(framework_name)',
+                '@executable_path/../../../../Frameworks/<(framework_name).framework/<(framework_name)',
                 '${BUILT_PRODUCTS_DIR}/${EXECUTABLE_PATH}'
               ],
             },
