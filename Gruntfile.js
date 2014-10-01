@@ -230,7 +230,7 @@ module.exports = function (grunt) {
             "version"       : "0.10.24"
         },
         "npm": {
-            "version"       : "1.2.11"
+            "version"       : "1.3.24"
         },
         "limecraft-node": {
             "repo": grunt.option("limecraft-node-repo") || "../edge"
