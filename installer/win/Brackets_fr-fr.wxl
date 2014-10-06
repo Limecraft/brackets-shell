@@ -16,8 +16,8 @@
 <WixLocalization Culture="fr-fr" xmlns="http://schemas.microsoft.com/wix/2006/localization">
     <String Id="LicenseRtf" Overridable="yes">EULA_fr-fr.rtf</String>
     
-    <String Id="ProductName">Brackets</String>
-    <String Id="ShortProductName">Brackets</String>
+    <String Id="ProductName">Dock10 Field Dock</String>
+    <String Id="ShortProductName">Field Dock</String>
   
     <String Id="LanguageID" Overridable="yes">1036</String>
         
