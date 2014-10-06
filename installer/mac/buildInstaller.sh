@@ -1,7 +1,7 @@
 #!/bin/bash 
 
 # config
-releaseName="Flow"
+releaseName="Field Dock"
 dmgName="${releaseName} alpha 1"
 format="bzip2"
 encryption="none"
