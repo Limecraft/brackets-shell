@@ -110,7 +110,7 @@ module.exports = function (grunt) {
                             "locales/**",
                             "node-core/**",
                             "Brackets.exe",
-							"Flow.exe",
+							"*.exe",
                             "node.exe",
                             "cef.pak",
                             "devtools_resources.pak",
@@ -209,7 +209,7 @@ module.exports = function (grunt) {
             }
         },
         "build": {
-            "name"              : "Flow",
+            "name"              : "Field Dock",
             "staging"           : staging
         },
         "git": {
