@@ -109,6 +109,7 @@ module.exports = function (grunt) {
                         "src"       : [
                             "locales/**",
                             "node-core/**",
+                            "extra-includes/**",
                             "Brackets.exe",
 							"*.exe",
                             "node.exe",
