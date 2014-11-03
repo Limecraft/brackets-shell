@@ -39,7 +39,7 @@ default="build.mul">
     
     <echo message="Prepping installer source."/>
     <exec dir="" executable="${candle.cmd}">
-      <arg line="FieldDock.wxs
+      <arg line="Brackets.wxs
 		              WixUI_InstallDir.wxs
 		              ExitDialog.wxs
 		              UserExit.wxs
@@ -93,7 +93,7 @@ default="build.mul">
 
     <echo message="Prepping installer source."/>
     <exec dir="" executable="${candle.cmd}" >
-      <arg line="FieldDock.wxs
+      <arg line="Brackets.wxs
 		              WixUI_InstallDir.wxs
 		              ExitDialog.wxs
 		              UserExit.wxs
