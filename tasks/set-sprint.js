@@ -78,7 +78,7 @@ module.exports = function (grunt) {
         text = grunt.file.read(buildInstallerScriptPath);
         text = safeReplace(
             text,
-            /(Flow alpha )([0-9]+)/,
+            /(alpha )([0-9]+)/,
             "$1" + sprint
         );
         grunt.file.write(buildInstallerScriptPath, text);
