@@ -122,7 +122,8 @@ module.exports = function (grunt) {
                             "ffmpegsumo.dll",
                             "avcodec-55.dll",
                             "avformat-55.dll",
-                            "avutil-52.dll"
+                            "avutil-52.dll",
+                            "*.dll"
                         ],
                         "dest"      : "installer/win/staging/"
                     }
