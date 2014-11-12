@@ -28,11 +28,11 @@ Normally, the installer scripts are run via Jenkins on the build machine http://
     * Copy these two files to _(wix-install-dir)_\bin
 9. You may need to locally edit `wix.base` in brackets-win-install-build.xml if the Wix install folder doesn't match what's hardcoded there
 
-## Update Sprint Number with Grunt
-To rev the Brackets sprint number with Grunt, both brackets-shell and brackets repositories must be updated. For the initial Grunt setup, see: https://github.com/adobe/brackets/wiki/Grunt-Setup.
+## Update Version Number with Grunt
+To rev the Edge version number with Grunt, both brackets-shell and brackets repositories must be updated. For the initial Grunt setup, see: https://github.com/adobe/brackets/wiki/Grunt-Setup.
 
-brackets       > grunt set-sprint --sprint=NN
-brackets-shell > grunt set-sprint --sprint=NN
+brackets       > grunt set-version --version=NN
+brackets-shell > grunt set-version --version=NN
 
 ## To rev the Brackets sprint number manually
 1. Open brackets-win-install-build.xml and change `product.sprint.number`

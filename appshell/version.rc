@@ -43,7 +43,7 @@ BEGIN
         BEGIN
             VALUE "CompanyName",      "Limecraft\0"
             VALUE "FileDescription",  "\0"
-            VALUE "FileVersion",      "alpha 1\0"
+            VALUE "FileVersion",      FILEVERSION "\0"
             VALUE "ProductName",      APP_NAME "\0"
             VALUE "ProductVersion",   "\0"
             VALUE "LegalCopyright",   "(c) 2014 Limecraft\0"

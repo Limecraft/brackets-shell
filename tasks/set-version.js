@@ -38,7 +38,7 @@ module.exports = function (grunt) {
     }
     
     // task: set-sprint
-    grunt.registerTask("set-sprint", "Update occurrences of sprint number for all native installers and binaries", function () {
+    grunt.registerTask("set-version", "Update occurrences of sprint number for all native installers and binaries", function () {
         var packageJsonPath             = "package.json",
             packageJSON                 = grunt.file.readJSON(packageJsonPath),
             winInstallerBuildXmlPath    = "installer/win/brackets-win-install-build.xml",
@@ -46,31 +46,23 @@ module.exports = function (grunt) {
             wxsPath                     = "installer/win/Brackets.wxs",
             versionRcPath               = "appshell/version.rc",
             infoPlistPath               = "appshell/mac/Info.plist",
-            sprint                      = grunt.option("sprint") || 0,
-            versionShort                = packageJSON.version.substr(0, packageJSON.version.indexOf("-")),
+            version                      = grunt.option("ver"),
             text;
 
-        // replace sprint number in short version, e.g. N.<sprint>.N
-        versionShort = versionShort.replace(/([0-9]+\.)([0-9]+)(\.[0-9]+)/, "$1" + sprint + "$3");
-
-        if (!sprint) {
-            grunt.fail.fatal("Please specify a sprint. e.g. grunt set-sprint --sprint=21");
+        if (!version) {
+            grunt.fail.fatal("Please specify a version. e.g. grunt set-version --ver=0.2.0");
         }
         
         // 1. Update package.json
-        packageJSON.version = safeReplace(
-            packageJSON.version,
-            /([0-9]+\.)([0-9]+)([\.\-a-zA-Z0-9]*)?/,
-            "$1" + sprint + "$3"
-        );
+        packageJSON.version = version;
         common.writeJSON(packageJsonPath, packageJSON);
         
-        // 2. Open installer/win/brackets-win-install-build.xml and change `product.sprint.number`
+        // 2. Open installer/win/brackets-win-install-build.xml and change `product.version`
         text = grunt.file.read(winInstallerBuildXmlPath);
         text = safeReplace(
             text,
-            /<property name="product\.sprint\.number" value="([0-9]+)"\/>/,
-            '<property name="product.sprint.number" value="' + sprint + '"/>'
+            /<property name="product\.version" value="([0-9\.]+)"\/>/,
+            '<property name="product.version" value="' + version + '"/>'
         );
         grunt.file.write(winInstallerBuildXmlPath, text);
         
@@ -78,8 +70,8 @@ module.exports = function (grunt) {
         text = grunt.file.read(buildInstallerScriptPath);
         text = safeReplace(
             text,
-            /(alpha )([0-9]+)/,
-            "$1" + sprint
+            /version="([0-9\.]+)"/,
+            'version="' + version + '"'
         );
         grunt.file.write(buildInstallerScriptPath, text);
         
@@ -87,13 +79,8 @@ module.exports = function (grunt) {
         text = grunt.file.read(versionRcPath);
         text = safeReplace(
             text,
-            /(FILEVERSION\s+[0-9]+,)([0-9]+)/,
-            "$1" + sprint
-        );
-        text = safeReplace(
-            text,
-            /(alpha )([0-9]+)/,
-            "$1" + sprint
+            /(FILEVERSION\s+)([0-9]+,[0-9]+,[0-9]+)/,
+            "$1" + version.replace(/\./g, ",")
         );
         grunt.file.write(versionRcPath, text);
         
@@ -102,12 +89,12 @@ module.exports = function (grunt) {
         text = safeReplace(
             text,
             /(<key>CFBundleVersion<\/key>\s*<string>)([0-9]+\.[0-9]+\.[0-9]+)(<\/string>)/,
-            "$1" + versionShort + "$3"
+            "$1" + version + "$3"
         );
         text = safeReplace(
             text,
             /(<key>CFBundleShortVersionString<\/key>\s*<string>)([0-9]+\.[0-9]+\.[0-9]+)(<\/string>)/,
-            "$1" + versionShort + "$3"
+            "$1" + version + "$3"
         );
         grunt.file.write(infoPlistPath, text);
     });

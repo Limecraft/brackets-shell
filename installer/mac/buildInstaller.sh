@@ -2,7 +2,8 @@
 
 # config
 releaseName="Field Dock"
-dmgName="${releaseName} alpha 1"
+version="0.0.0"
+dmgName="${releaseName} ${version}"
 format="bzip2"
 encryption="none"
 tmpLayout="./dropDmgConfig/layouts/tempLayout"
