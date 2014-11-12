@@ -11,7 +11,7 @@ default="build.mul">
   <!-- Product & version labeling -->
   <!-- See also: product name definitions in Brackets_<locale>.wxl -->
   <property name="product.shortname" value="Field Dock"/>
-  <property name="product.version" value="0.1.0"/>
+  <property name="product.version" value="0.1.1"/>
   <property name="product.version.number" value="${product.version}"/>
   <property name="product.version.name" value="${product.version}"/>
   <property name="product.fullname" value="Dock10 Field Dock"/>
