@@ -99,7 +99,7 @@ module.exports = function (grunt) {
             "staging-win"       : ["installer/win/staging"],
             "staging-linux"     : ["<%= build.staging %>"],
             "www"               : ["<%= build.staging %>/www", "<%= build.staging %>/samples"],
-            "server"            : ["<%= build.staging %>/node-core"]
+            "server"            : ["Release/node-core", "<%= build.staging %>/node-core"]
         },
         "copy": {
             "serverToRelease":  {
@@ -111,8 +111,7 @@ module.exports = function (grunt) {
                         "dest": "Release/node-core/"
                     }
                 ]
-            }
-            ,
+            },
             "win": {
                 "files": [
                     {
@@ -255,6 +254,9 @@ module.exports = function (grunt) {
         },
         "npm": {
             "version"       : "1.3.24"
+        },
+        "server-project": {
+            "repo": "<%=git.server.repo%>"
         }
     });
 
