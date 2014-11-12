@@ -98,7 +98,8 @@ module.exports = function (grunt) {
             "staging-mac"       : ["installer/mac/staging"],
             "staging-win"       : ["installer/win/staging"],
             "staging-linux"     : ["<%= build.staging %>"],
-            "www"               : ["<%= build.staging %>/www", "<%= build.staging %>/samples"]
+            "www"               : ["<%= build.staging %>/www", "<%= build.staging %>/samples"],
+            "server"            : ["<%= build.staging %>/node-core"]
         },
         "copy": {
             "win": {
@@ -181,6 +182,17 @@ module.exports = function (grunt) {
                     }
                 ]
             },
+            "server": {
+                "files": [
+                    {
+                        "dot"       : true,
+                        "expand"    : true,
+                        "cwd"       : "<%= git.server.repo %>",
+                        "src"       : ["**", "!**/.git*"],
+                        "dest"      : "<%= build.staging %>/node-core/"
+                    }
+                ]
+            },
             "samples": {
                 "files": [
                     {
@@ -190,11 +202,6 @@ module.exports = function (grunt) {
                         "src"       : ["**"],
                         "dest"      : "<%= build.staging %>/samples/"
                     }
-                ]
-            },
-            "limecraft-node-backup": {
-                files: [
-                    {src: ["appshell/node-core/**"], dest: "appshell/node-core-backup", expand: true}
                 ]
             }
         },
@@ -219,6 +226,10 @@ module.exports = function (grunt) {
                 "repo"      : grunt.option("www-repo") || "../edge-js",    // TODO user configurable?
                 "branch"    : grunt.option("www-branch") || "development"
             },
+            "server": {
+                "repo"      : grunt.option("server-repo") || "../edge",
+                "branch"    : grunt.option("server-branch") || "master"
+            },
             "shell": {
                 "repo"      : ".",
                 "branch"    : grunt.option("shell-branch") || ""
@@ -233,12 +244,6 @@ module.exports = function (grunt) {
         },
         "npm": {
             "version"       : "1.3.24"
-        },
-        "limecraft-node": {
-            "repo": grunt.option("limecraft-node-repo") || "../edge"
-        },
-        "limecraft-release-node": {
-            "repo": grunt.option("limecraft-node-repo") || "../edge"
         }
     });
 
@@ -269,5 +274,5 @@ module.exports = function (grunt) {
         grunt.file.write(configFile, JSON.stringify(json, undefined, 4));
     });
 
-    grunt.registerTask("default", ["limecraft-node", "setup", "build"]);
+    grunt.registerTask("default", ["setup", "build"]);
 };

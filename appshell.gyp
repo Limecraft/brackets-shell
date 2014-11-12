@@ -121,14 +121,14 @@
               'destination': '<(PRODUCT_DIR)',
               'files': ['deps/node/node.exe'],
             },
-            {
-              # Copy node server files to the output directory
-              # The '/' at the end of the 'files' directory is very important and magically
-              # causes 'xcopy' to get used instead of 'copy' for recursive copies.
-              # This seems to be an undocumented feature of gyp.
-             'destination': '<(PRODUCT_DIR)',
-              'files': ['appshell/node-core/'],
-            },
+            #{
+            #  # Copy node server files to the output directory
+            #  # The '/' at the end of the 'files' directory is very important and magically
+            #  # causes 'xcopy' to get used instead of 'copy' for recursive copies.
+            #  # This seems to be an undocumented feature of gyp.
+            # 'destination': '<(PRODUCT_DIR)',
+            #  'files': ['appshell/node-core/'],
+            #},
             {
               # Copy resources
               'destination': '<(PRODUCT_DIR)',
@@ -187,18 +187,18 @@
                 '${BUILT_PRODUCTS_DIR}/${EXECUTABLE_PATH}'
               ],
             },
-            {
-              # Copy the entire "node-core" directory into the same location as the "www"
-              # directory will end up. Note that the ".." in the path is necessary because
-              # the EXECUTABLE_FOLDER_PATH macro resolves to multiple levels of folders.
-              'postbuild_name': 'Copy node core resources',
-              'action': [
-                'rsync',
-                '-a',
-                './appshell/node-core/',
-                '${BUILT_PRODUCTS_DIR}/${EXECUTABLE_FOLDER_PATH}/../node-core/',
-              ],
-            },
+            #{
+            #  # Copy the entire "node-core" directory into the same location as the "www"
+            #  # directory will end up. Note that the ".." in the path is necessary because
+            #  # the EXECUTABLE_FOLDER_PATH macro resolves to multiple levels of folders.
+            #  'postbuild_name': 'Copy node core resources',
+            #  'action': [
+            #    'rsync',
+            #    '-a',
+            #    './appshell/node-core/',
+            #    '${BUILT_PRODUCTS_DIR}/${EXECUTABLE_FOLDER_PATH}/../node-core/',
+            #  ],
+            #},
             {
               'postbuild_name': 'Copy node executable',
               'action': [
@@ -337,14 +337,14 @@
               'destination': '<(PRODUCT_DIR)',
               'files': ['deps/node/bin/node'],
             },
-            {
-              # Copy node server files to the output directory
-              # The '/' at the end of the 'files' directory is very important and magically
-              # causes 'xcopy' to get used instead of 'copy' for recursive copies.
-              # This seems to be an undocumented feature of gyp.
-             'destination': '<(PRODUCT_DIR)',
-              'files': ['appshell/node-core/'],
-            },
+            #{
+            #  # Copy node server files to the output directory
+            #  # The '/' at the end of the 'files' directory is very important and magically
+            #  # causes 'xcopy' to get used instead of 'copy' for recursive copies.
+            #  # This seems to be an undocumented feature of gyp.
+            # 'destination': '<(PRODUCT_DIR)',
+            #  'files': ['appshell/node-core/'],
+            #},
           ],
           'sources': [
             '<@(includes_linux)',

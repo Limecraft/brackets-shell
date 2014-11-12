@@ -178,6 +178,7 @@ module.exports = function (grunt) {
     // task: package
     grunt.registerTask("package", "Package www files", function () {
         grunt.task.run(["clean:www", "copy:www", "copy:samples"]);
+        grunt.task.run(["clean:server", "copy:server"]);
     });
     
     // task: build-installer
