@@ -87,7 +87,7 @@ module.exports = function (grunt) {
         text = safeReplace(
             text,
             /(VALUE\s+"FileVersion",\s+)"[0-9\.]+\\0"/,
-            '$1"' + version + '\0"'
+            '$1"' + version + '\\0"'
         );
 
         grunt.file.write(versionRcPath, text);
