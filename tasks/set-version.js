@@ -82,6 +82,14 @@ module.exports = function (grunt) {
             /(FILEVERSION\s+)([0-9]+,[0-9]+,[0-9]+)/,
             "$1" + version.replace(/\./g, ",")
         );
+
+        //VALUE "FileVersion",      "0.0.0\0"
+        text = safeReplace(
+            text,
+            /(VALUE\s+"FileVersion",\s+)"[0-9\.]+\\0"/,
+            '$1"' + version + '\0"'
+        );
+
         grunt.file.write(versionRcPath, text);
         
         // 5. Open appshell/mac/Info.plist and change `CFBundleShortVersionString` and `CFBundleVersion`text = grunt.file.read(wxsPath);
