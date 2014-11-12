@@ -102,6 +102,17 @@ module.exports = function (grunt) {
             "server"            : ["<%= build.staging %>/node-core"]
         },
         "copy": {
+            "serverToRelease":  {
+                "files": [
+                    {
+                        "expand": true,
+                        "cwd": "<%=git.server.repo%>",
+                        "src": ["**", "!**/.git*"],
+                        "dest": "Release/node-core/"
+                    }
+                ]
+            }
+            ,
             "win": {
                 "files": [
                     {
