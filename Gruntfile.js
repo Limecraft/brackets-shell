@@ -177,7 +177,7 @@ module.exports = function (grunt) {
                         "dot"       : true,
                         "expand"    : true,
                         "cwd"       : "<%= git.www.repo %>",
-                        "src"       : ["**", "!**/.git*", "!**/node_modules"],
+                        "src"       : ["**", "!**/.git*", "!**/node_modules*"],
                         "dest"      : "<%= build.staging %>/www/"
                     }
                 ]
