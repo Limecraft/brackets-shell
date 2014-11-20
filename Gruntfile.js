@@ -77,7 +77,7 @@ module.exports = function (grunt) {
             /* win */
             "cef-win": {
                 "dest"      : "<%= downloads %>",
-                "src"       : "http://10.100.16.13/cef_binary_3.1750.1774_windows32_with_r3d_support.zip"
+                "src"       : "http://10.100.16.13/cef_binary_3.1750.1774_windows32.zip"
                 //"src"       : "<%= cef.url %>/cef_binary_<%= cef.version %>_windows32.zip"
             },
             "cef-win-symbols": {
