@@ -62,3 +62,4 @@ appshell/node-core
 
 .idea
 atlassian-ide-plugin.xml
+!/installer/win/vc2008SP1Redist_x86.exe
