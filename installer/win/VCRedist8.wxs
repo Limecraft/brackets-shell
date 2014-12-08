@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+    Copyright (c) Microsoft Corporation.  All rights reserved.
+
+    The use and distribution terms for this software are covered by the
+    Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
+    which can be found in the file CPL.TXT at the root of this distribution.
+    By using this software in any fashion, you are agreeing to be bound by
+    the terms of this license.
+
+    You must not remove this notice, or any other, from this software.
+-->
+<!--
+VC8 redist
+-->
+
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi" xmlns:util='http://schemas.microsoft.com/wix/UtilExtension'>
+    <Fragment>
+
+        <!--
+        refs
+        http://www.xeam-solutions.eu/knowledge-base/wix-toolset-burn/visual-studio-runtime-prerequiste.html
+        http://windows-installer-xml-wix-toolset.687559.n2.nabble.com/Re-VC-redistributable-questions-td6312632.html
+
+        -->
+
+        <!-- Microsoft Visual C++ 2008 SP1 x86 Redistributable (9.0.30729)  -->
+        <Property Id="VC2008SP1REDIST_X86" Secure="yes">
+            <RegistrySearch Id="VC2008SP1REDIST_X86Value" Root="HKLM"
+                            Key="SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{9A25302D-30C0-39D9-BD6F-21E6EC160475}"
+                            Name="Publisher" Type="raw" Win64="no" />
+        </Property>
+        <CustomAction Id="Install_2008SP1VCredist.x86" Impersonate="yes"
+                      Return="check" Execute="immediate" BinaryKey="vc2008SP1Redist_x86.exe"
+                      ExeCommand="/qb"/>
+        <Binary Id="vc2008SP1Redist_x86.exe"
+                SourceFile="$(sys.SOURCEFILEDIR)\vc2008SP1Redist_x86.exe"/>
+        <InstallUISequence>
+            <Custom Action="Install_2008SP1VCredist.x86"
+                    After="ProgressDlg">Not Installed And Not VC2008SP1REDIST_X86</Custom>
+        </InstallUISequence>
+
+
+    </Fragment>
+</Wix>

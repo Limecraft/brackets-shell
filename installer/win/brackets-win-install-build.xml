@@ -41,6 +41,7 @@ default="build.mul">
     <exec dir="" executable="${candle.cmd}">
       <arg line="Brackets.wxs
 		              WixUI_InstallDir.wxs
+		              VCRedist8.wxs
 		              ExitDialog.wxs
 		              UserExit.wxs
 		              ProgressDlg.wxs
@@ -70,6 +71,7 @@ default="build.mul">
 		                 Brackets.wixobj
 		                 bracketsharvestmanager.wixobj
 		                 WixUI_InstallDir.wixobj
+		                 VCRedist8.wxs
 		                 ExitDialog.wixobj
 		                 InstallDirDlg.wixobj
 		                 UserExit.wixobj
@@ -95,6 +97,7 @@ default="build.mul">
     <exec dir="" executable="${candle.cmd}" >
       <arg line="Brackets.wxs
 		              WixUI_InstallDir.wxs
+		              VCRedist8.wxs
 		              ExitDialog.wxs
 		              UserExit.wxs
 		              ProgressDlg.wxs
@@ -124,6 +127,7 @@ default="build.mul">
 		                 Brackets.wixobj
 		                 bracketsharvestmanager.wixobj
 		                 WixUI_InstallDir.wixobj
+		                 VCRedist8.wixobj
 		                 ExitDialog.wixobj
 		                 InstallDirDlg.wixobj
 		                 UserExit.wixobj

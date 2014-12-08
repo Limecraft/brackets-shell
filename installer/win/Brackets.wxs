@@ -90,6 +90,9 @@
             -->
         </UI>
 
+        <!-- redist packages -->
+        <PackageGroupRef Id="redist_vc8"/>
+
         <!-- Add image assets -->
         <WixVariable Id="WixUIBannerBmp" Value="win_install_banner.jpg" />
 
