@@ -103,13 +103,29 @@
 
         <!-- add MSVCRT merge modules -->
         <DirectoryRef Id="TARGETDIR">
-            <Merge Id="VCRedist" SourceFile="$(env.CommonProgramFiles)\Merge Modules\Microsoft_VC110_CRT_x86.msm" DiskId="1" Language="0"/>
+            <Merge Id="VCRedist100" SourceFile="$(env.CommonProgramFiles)\Merge Modules\Microsoft_VC100_CRT_x86.msm" DiskId="1" Language="0"/>
         </DirectoryRef>
 
-        <Feature Id="VCRedist" Title="Visual C++ 8.0 Runtime" AllowAdvertise="no" Display="hidden" Level="1">
-            <MergeRef Id="VCRedist"/>
+        <Feature Id="VCRedist100" Title="Visual C++ 10 Runtime" AllowAdvertise="no" Display="hidden" Level="1">
+            <MergeRef Id="VCRedist100"/>
         </Feature>
-        
+
+        <DirectoryRef Id="TARGETDIR">
+            <Merge Id="VCRedist110" SourceFile="$(env.CommonProgramFiles)\Merge Modules\Microsoft_VC110_CRT_x86.msm" DiskId="1" Language="0"/>
+        </DirectoryRef>
+
+        <Feature Id="VCRedist110" Title="Visual C++ 11 Runtime" AllowAdvertise="no" Display="hidden" Level="1">
+            <MergeRef Id="VCRedist110"/>
+        </Feature>
+
+        <DirectoryRef Id="TARGETDIR">
+            <Merge Id="VCRedist120" SourceFile="$(env.CommonProgramFiles)\Merge Modules\Microsoft_VC120_CRT_x86.msm" DiskId="1" Language="0"/>
+        </DirectoryRef>
+
+        <Feature Id="VCRedist120" Title="Visual C++ 12 Runtime" AllowAdvertise="no" Display="hidden" Level="1">
+            <MergeRef Id="VCRedist120"/>
+        </Feature>
+
         <!-- Set default install location -->
         <Property Id="WIXUI_INSTALLDIR" Value="INSTALLDIR" />
         <!-- Install Files -->
