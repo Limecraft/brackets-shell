@@ -71,7 +71,7 @@ default="build.mul">
 		                 Brackets.wixobj
 		                 bracketsharvestmanager.wixobj
 		                 WixUI_InstallDir.wixobj
-		                 VCRedist8.wxs
+		                 VCRedist8.wixobj
 		                 ExitDialog.wixobj
 		                 InstallDirDlg.wixobj
 		                 UserExit.wixobj
