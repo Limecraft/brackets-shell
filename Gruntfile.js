@@ -233,7 +233,7 @@ module.exports = function (grunt) {
         },
         "git": {
             "www": {
-                "repo"      : grunt.option("www-repo") || "../edge-js",    // TODO user configurable?
+                "repo"      : grunt.option("www-repo") || "../edge-js/dist",    // TODO user configurable?
                 "branch"    : grunt.option("www-branch") || "development"
             },
             "server": {
