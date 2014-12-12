@@ -29,9 +29,9 @@ namespace Gdiplus
     class Image;
 };
 
-// Color Constants
-#define CEF_COLOR_BACKGROUND_ACTIVE         RGB(75, 85, 95)
-#define CEF_COLOR_BACKGROUND_INACTIVE       RGB(75, 85, 95)
+// Color Constants#4a5055
+#define CEF_COLOR_BACKGROUND_ACTIVE         RGB(74, 80, 85)
+#define CEF_COLOR_BACKGROUND_INACTIVE       RGB(74, 80, 85)
 #define CEF_COLOR_FRAME_OUTLINE_ACTIVE      RGB(42, 44, 45)
 #define CEF_COLOR_FRAME_OUTLINE_INACTIVE    RGB(42, 44, 45)
 #define CEF_COLOR_NORMALTEXT                RGB(215, 216, 217)
