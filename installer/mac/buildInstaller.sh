@@ -2,7 +2,7 @@
 
 # config
 releaseName="Field Dock"
-version="0.2.3"
+version="0.2.4"
 dmgName="${releaseName} ${version}"
 format="bzip2"
 encryption="none"
