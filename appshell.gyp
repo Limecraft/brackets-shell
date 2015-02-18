@@ -78,6 +78,11 @@
         'SYMROOT': 'xcodebuild',
         'GCC_TREAT_WARNINGS_AS_ERRORS': 'NO',
         'GCC_VERSION': 'com.apple.compilers.llvm.clang.1_0',
+        # code signing
+        'CODE_SIGN_IDENTITY': 'Developer ID Application',
+        'CODE_SIGN_IDENTITY[sdk=macosx*]': '<(signer)',
+        # Necessary to avoid warning "skipping copy phase strip, binary is code signed"
+        'COPY_PHASE_STRIP': 'NO',
       },
       'conditions': [
         ['OS=="win"', {
@@ -142,14 +147,14 @@
               'destination': '<(PRODUCT_DIR)',
               'files': ['deps/node/node.exe'],
             },
-            {
-              # Copy node server files to the output directory
-              # The '/' at the end of the 'files' directory is very important and magically
-              # causes 'xcopy' to get used instead of 'copy' for recursive copies.
-              # This seems to be an undocumented feature of gyp.
-             'destination': '<(PRODUCT_DIR)',
-              'files': ['appshell/node-core/'],
-            },
+            #{
+            #  # Copy node server files to the output directory
+            #  # The '/' at the end of the 'files' directory is very important and magically
+            #  # causes 'xcopy' to get used instead of 'copy' for recursive copies.
+            #  # This seems to be an undocumented feature of gyp.
+            # 'destination': '<(PRODUCT_DIR)',
+            #  'files': ['appshell/node-core/'],
+            #},
             {
               # Copy resources
               'destination': '<(PRODUCT_DIR)',
@@ -197,6 +202,27 @@
             },
           ],
           'postbuilds': [
+            # Codesign the CEF framework component
+            {
+              'postbuild_name': 'Codesign CEFramework',
+              'action': [
+                'codesign',
+                '--verbose',
+                '--force',
+                '--sign',
+                '<(signer)',
+                '${BUILT_PRODUCTS_DIR}/${FRAMEWORKS_FOLDER_PATH}/Chromium Embedded Framework.framework'
+              ],
+            },
+            {
+             'postbuild_name': 'Add framework',
+              'action': [
+                'cp',
+                '-Rf',
+                '${CONFIGURATION}/<(framework_name).framework',
+                '${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.app/Contents/Frameworks/'
+              ],
+            },
             {
              'postbuild_name': 'Add framework',
               'action': [
@@ -216,24 +242,36 @@
                 '${BUILT_PRODUCTS_DIR}/${EXECUTABLE_PATH}'
               ],
             },
-            {
-              # Copy the entire "node-core" directory into the same location as the "www"
-              # directory will end up. Note that the ".." in the path is necessary because
-              # the EXECUTABLE_FOLDER_PATH macro resolves to multiple levels of folders.
-              'postbuild_name': 'Copy node core resources',
-              'action': [
-                'rsync',
-                '-a',
-                './appshell/node-core/',
-                '${BUILT_PRODUCTS_DIR}/${EXECUTABLE_FOLDER_PATH}/../node-core/',
-              ],
-            },
+            #{
+            #  # Copy the entire "node-core" directory into the same location as the "www"
+            #  # directory will end up. Note that the ".." in the path is necessary because
+            #  # the EXECUTABLE_FOLDER_PATH macro resolves to multiple levels of folders.
+            #  'postbuild_name': 'Copy node core resources',
+            #  'action': [
+            #    'rsync',
+            #    '-a',
+            #    './appshell/node-core/',
+            #    '${BUILT_PRODUCTS_DIR}/${EXECUTABLE_FOLDER_PATH}/../node-core/',
+            #  ],
+            #},
             {
               'postbuild_name': 'Copy node executable',
               'action': [
                 'cp',
-                './deps/node/bin/Brackets-node',
-                '${BUILT_PRODUCTS_DIR}/${EXECUTABLE_FOLDER_PATH}/Brackets-node',
+                './deps/node/bin/node',
+                '${BUILT_PRODUCTS_DIR}/${EXECUTABLE_FOLDER_PATH}/node',
+              ],
+            },
+            # Codesign the node executable
+            {
+              'postbuild_name': 'Codesign node',
+              'action': [
+                'codesign',
+                '--verbose',
+                '--force',
+                '--sign',
+                '<(signer)',
+                '${BUILT_PRODUCTS_DIR}/${EXECUTABLE_FOLDER_PATH}/node'
               ],
             },
             {
@@ -250,6 +288,40 @@
                 'tools/make_more_helpers.sh',
                 'Frameworks',
                 '<(appname)',
+              ],
+            },
+            # Codesign the helpers
+            {
+              'postbuild_name': 'Codesign Flow Helper',
+              'action': [
+                'codesign',
+                '--verbose',
+                '--force',
+                '--sign',
+                '<(signer)',
+                '${BUILT_PRODUCTS_DIR}/${FRAMEWORKS_FOLDER_PATH}/Flow Helper.app'
+              ],
+            },
+            {
+              'postbuild_name': 'Codesign Flow Helper EH',
+              'action': [
+                'codesign',
+                '--verbose',
+                '--force',
+                '--sign',
+                '<(signer)',
+                '${BUILT_PRODUCTS_DIR}/${FRAMEWORKS_FOLDER_PATH}/Flow Helper EH.app'
+              ],
+            },
+            {
+              'postbuild_name': 'Codesign Flow Helper NP',
+              'action': [
+                'codesign',
+                '--verbose',
+                '--force',
+                '--sign',
+                '<(signer)',
+                '${BUILT_PRODUCTS_DIR}/${FRAMEWORKS_FOLDER_PATH}/Flow Helper NP.app'
               ],
             },
           ],
@@ -318,16 +390,16 @@
             {
               # Copy node executable to the output directory
               'destination': '<(PRODUCT_DIR)',
-              'files': ['deps/node/bin/Brackets-node'],
+              'files': ['deps/node/bin/node'],
             },
-            {
-              # Copy node server files to the output directory
-              # The '/' at the end of the 'files' directory is very important and magically
-              # causes 'xcopy' to get used instead of 'copy' for recursive copies.
-              # This seems to be an undocumented feature of gyp.
-             'destination': '<(PRODUCT_DIR)',
-              'files': ['appshell/node-core/'],
-            },
+            #{
+            #  # Copy node server files to the output directory
+            #  # The '/' at the end of the 'files' directory is very important and magically
+            #  # causes 'xcopy' to get used instead of 'copy' for recursive copies.
+            #  # This seems to be an undocumented feature of gyp.
+            # 'destination': '<(PRODUCT_DIR)',
+            #  'files': ['appshell/node-core/'],
+            #},
           ],
           'sources': [
             '<@(includes_linux)',
@@ -466,6 +538,11 @@
             'SYMROOT': 'xcodebuild',
             'GCC_TREAT_WARNINGS_AS_ERRORS': 'NO',
             'GCC_VERSION': 'com.apple.compilers.llvm.clang.1_0',
+            # code signing
+            'CODE_SIGN_IDENTITY': 'Developer ID Application',
+            'CODE_SIGN_IDENTITY[sdk=macosx*]': '<(signer)',
+            # Necessary to avoid warning "skipping copy phase strip, binary is code signed"
+            'COPY_PHASE_STRIP': 'NO',
             'FRAMEWORK_SEARCH_PATHS': [
               '$(inherited)',
               '$(CONFIGURATION)'

@@ -3,20 +3,19 @@
 default="build.mul">
 
   <!-- Key locations on disk -->
-  <property name="wix.base" value="C:\Program Files (x86)\Windows Installer XML v3.5"/>
+  <property name="wix.base" value="C:\Program Files (x86)\WiX Toolset v3.7"/>
 
   <property name="brackets.staging" value=".\staging"/>
 
 
   <!-- Product & version labeling -->
   <!-- See also: product name definitions in Brackets_<locale>.wxl -->
-  <property name="product.shortname" value="Brackets"/>
-  <property name="product.release.number.major" value="1"/>
-  <property name="product.release.number.minor" value="3"/>
-  <property name="product.version.number" value="${product.release.number.major}.${product.release.number.minor}"/>
-  <property name="product.version.name" value="Release ${product.version.number}"/>
-  <property name="product.fullname" value="Brackets ${product.version.name}"/>
-  <property name="product.manufacturer" value="brackets.io"/>
+  <property name="product.shortname" value="Field Dock"/>
+  <property name="product.version" value="0.2.4"/>
+  <property name="product.version.number" value="${product.version}"/>
+  <property name="product.version.name" value="${product.version}"/>
+  <property name="product.fullname" value="Dock10 Field Dock"/>
+  <property name="product.manufacturer" value="Limecraft"/>
   <property name="product.registry.root" value="${product.shortname}"/>
 
 
@@ -42,6 +41,7 @@ default="build.mul">
     <exec dir="" executable="${candle.cmd}">
       <arg line="Brackets.wxs
 		              WixUI_InstallDir.wxs
+		              VCRedist8.wxs
 		              ExitDialog.wxs
 		              UserExit.wxs
 		              ProgressDlg.wxs
@@ -71,6 +71,7 @@ default="build.mul">
 		                 Brackets.wixobj
 		                 bracketsharvestmanager.wixobj
 		                 WixUI_InstallDir.wixobj
+		                 VCRedist8.wixobj
 		                 ExitDialog.wixobj
 		                 InstallDirDlg.wixobj
 		                 UserExit.wixobj
@@ -96,6 +97,7 @@ default="build.mul">
     <exec dir="" executable="${candle.cmd}" >
       <arg line="Brackets.wxs
 		              WixUI_InstallDir.wxs
+		              VCRedist8.wxs
 		              ExitDialog.wxs
 		              UserExit.wxs
 		              ProgressDlg.wxs
@@ -125,6 +127,7 @@ default="build.mul">
 		                 Brackets.wixobj
 		                 bracketsharvestmanager.wixobj
 		                 WixUI_InstallDir.wixobj
+		                 VCRedist8.wixobj
 		                 ExitDialog.wixobj
 		                 InstallDirDlg.wixobj
 		                 UserExit.wixobj

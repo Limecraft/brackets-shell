@@ -8,6 +8,7 @@ xcodebuild/*
 
 appshell.xcodeproj
 Brackets.vcxproj
+*.vcxproj
 appshell.sln
 libcef_dll_wrapper.vcxproj
 
@@ -57,3 +58,8 @@ appshell/gtk
 appshell/gtk/*
 
 appshell/node-core/node_modules
+appshell/node-core
+
+.idea
+atlassian-ide-plugin.xml
+!/installer/win/vc2008SP1Redist_x86.exe

@@ -63,8 +63,17 @@ module.exports = function (grunt) {
     }());
 
     function unzip(src, dest) {
+		var command;
         grunt.verbose.writeln("Extracting " + src);
-        return exec("unzip -q \"" + src + "\" -d \"" + dest + "\"");
+
+		command = "unzip -q \"" + src + "\" -d \"" + dest + "\"";
+		if (platform === "win") {
+			command = "7za x -o" + dest + " " + src;
+		}
+
+		grunt.log.writeln(command);
+		
+        return exec(command);
     }
 
     // task: cef
@@ -86,7 +95,7 @@ module.exports = function (grunt) {
 
         // optionally download if CEF is not found
         if (!grunt.file.exists("deps/cef/" + txtName)) {
-            var cefTasks = ["cef-clean", "cef-extract", "cef-symlinks"];
+            var cefTasks = ["cef-clean", "cef-extract", "cef-symlinks", "cef-plist"];
 
             if (grunt.file.exists(zipDest)) {
                 grunt.verbose.writeln("Found CEF download " + zipDest);
@@ -325,6 +334,14 @@ module.exports = function (grunt) {
         });
     });
 
+    // strange hack in which we copy Info.plist for cef framework, otherwise
+    // build keeps failing
+    grunt.registerTask("cef-plist", "info.plist for cef", function () {
+        if (platform === "mac") {
+            grunt.file.copy("appshell/mac/cef-Info.plist",  "deps/cef/Resources/Info.plist");
+        }
+    });
+
     // task: node-download
     grunt.registerTask("node", "Download Node.js binaries and setup dependencies", function () {
         var config      = "node-" + platform + common.arch(),
@@ -419,7 +436,7 @@ module.exports = function (grunt) {
             // for npm to function properly, but we want to call the executable "Brackets-node"
             // in the final binary. Due to gyp's limited nature, we can't (easily) do this rename
             // as part of the build process.
-            return rename("deps/node/bin/node", "deps/node/bin/Brackets-node");
+            return rename("deps/node/bin/node", "deps/node/bin/node");
         }).then(function () {
             nodeWriteVersion();
             done();

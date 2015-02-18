@@ -364,6 +364,7 @@ public:
 #if defined(OS_WIN)
             wi.SetAsPopup(NULL, "DevTools");
 #endif
+
             browser->GetHost()->ShowDevTools(wi, browser->GetHost()->GetClient(), settings, CefPoint());
 
         } else if (message_name == "GetNodeState") {

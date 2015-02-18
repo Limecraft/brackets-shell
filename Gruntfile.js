@@ -28,8 +28,9 @@ module.exports = function (grunt) {
     var common  = require("./tasks/common")(grunt),
         resolve = common.resolve,
         platform = common.platform(),
+        _ = grunt.util._,
         staging;
-
+    
     if (platform === "mac") {
         staging = "installer/mac/staging/<%= build.name %>.app/Contents";
     } else if (platform === "win") {
@@ -96,9 +97,20 @@ module.exports = function (grunt) {
             "staging-mac"       : ["installer/mac/staging"],
             "staging-win"       : ["installer/win/staging"],
             "staging-linux"     : ["<%= build.staging %>"],
-            "www"               : ["<%= build.staging %>/www", "<%= build.staging %>/samples"]
+            "www"               : ["<%= build.staging %>/www", "<%= build.staging %>/samples"],
+            "server"            : ["Release/node-core", "<%= build.staging %>/node-core"]
         },
         "copy": {
+            "serverToRelease":  {
+                "files": [
+                    {
+                        "expand": true,
+                        "cwd": "<%=git.server.repo%>",
+                        "src": ["**", "!**/.git*"],
+                        "dest": "Release/node-core/"
+                    }
+                ]
+            },
             "win": {
                 "files": [
                     {
@@ -107,14 +119,24 @@ module.exports = function (grunt) {
                         "src"       : [
                             "locales/**",
                             "node-core/**",
+                            "extra-includes/**",
                             "Brackets.exe",
+							"*.exe",
                             "node.exe",
                             "cef.pak",
                             "cef_100_percent.pak",
                             "cef_200_percent.pak",
                             "devtools_resources.pak",
+                            "libcef.dll",
                             "icudtl.dat",
-                            "libcef.dll"
+                            "icudt.dll",
+
+                            //Limecraft custom: extra necessary libs
+                            "ffmpegsumo.dll",
+                            "avcodec-55.dll",
+                            "avformat-55.dll",
+                            "avutil-52.dll",
+                            "*.dll"
                         ],
                         "dest"      : "installer/win/staging/"
                     }
@@ -155,7 +177,7 @@ module.exports = function (grunt) {
                             "node-core/**",
                             "appshell*.png",
                             "Brackets",
-                            "Brackets-node",
+                            "node",
                             "cef.pak",
                             "devtools_resources.pak"
                         ],
@@ -177,9 +199,20 @@ module.exports = function (grunt) {
                     {
                         "dot"       : true,
                         "expand"    : true,
-                        "cwd"       : "<%= git.www.repo %>/dist",
-                        "src"       : ["**", "!**/.git*"],
+                        "cwd"       : "<%= git.www.repo %>",
+                        "src"       : ["**", "!node_modules/**", "!.*/**", "!doc/**", "!styles/**", "!test/**"],
                         "dest"      : "<%= build.staging %>/www/"
+                    }
+                ]
+            },
+            "server": {
+                "files": [
+                    {
+                        "dot"       : true,
+                        "expand"    : true,
+                        "cwd"       : "<%= git.server.repo %>",
+                        "src"       : ["**", "!**/.git*"],
+                        "dest"      : "<%= build.staging %>/node-core/"
                     }
                 ]
             },
@@ -208,13 +241,17 @@ module.exports = function (grunt) {
             }
         },
         "build": {
-            "name"              : "Brackets",
+            "name"              : "Field Dock",
             "staging"           : staging
         },
         "git": {
             "www": {
-                "repo"      : "../brackets",    // TODO user configurable?
-                "branch"    : grunt.option("www-branch") || ""
+                "repo"      : grunt.option("www-repo") || "../edge-js/dist",    // TODO user configurable?
+                "branch"    : grunt.option("www-branch") || "development"
+            },
+            "server": {
+                "repo"      : grunt.option("server-repo") || "../edge",
+                "branch"    : grunt.option("server-branch") || "master"
             },
             "shell": {
                 "repo"      : ".",
@@ -229,7 +266,10 @@ module.exports = function (grunt) {
             "version"       : "0.10.24"
         },
         "npm": {
-            "version"       : "1.2.11"
+            "version"       : "1.3.24"
+        },
+        "server-project": {
+            "repo": "<%=git.server.repo%>"
         }
     });
 
@@ -238,6 +278,27 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks("grunt-contrib-copy");
     grunt.loadNpmTasks("grunt-contrib-clean");
     grunt.loadNpmTasks("grunt-curl");
+
+    grunt.registerTask('configure-barracuda', "Configure barracuda", function () {
+        var configFile = grunt.option["barracuda-config-file"] || "appshell/node-core/config/default.json",
+            json = grunt.file.readJSON(configFile);
+
+        _.each([
+            "backend",
+            "contentRoot",
+            "debug",
+            "refreshRate",
+            "numberTranscoders",
+            "numberProbes",
+            "isBrackets",
+            "build_no",
+            "ignoredrives",
+            "skip_proxyengine"
+        ], function (key) {
+            json[key] = grunt.option("barracuda-" + key) || json[key];
+        });
+        grunt.file.write(configFile, JSON.stringify(json, undefined, 4));
+    });
 
     grunt.registerTask("default", ["setup", "build"]);
 };

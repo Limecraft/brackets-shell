@@ -1,9 +1,9 @@
 #!/bin/bash
 
 # config
-releaseName="Brackets"
-version="1.3"
-dmgName="${releaseName} Release ${version}"
+releaseName="Field Dock"
+version="0.2.4"
+dmgName="${releaseName} ${version}"
 format="bzip2"
 encryption="none"
 tmpLayout="./dropDmgConfig/layouts/tempLayout"
@@ -34,6 +34,13 @@ fi
 # create disk layout
 rm -rf $tempLayoutDir
 cp -r ./dropDmgConfig/layouts/bracketsLayout/ "$tmpLayout"
+
+# Replace APPLICATION_NAME in Info.plist with $releaseName.app
+grep -rl APPLICATION_NAME "${tmpLayout}/Info.plist" | xargs sed -i -e "s/APPLICATION_NAME/${releaseName}.app/g"
+
+if [ -f ./codesign.sh ]; then
+  ./codesign.sh
+fi
 
 # build the DMG
 echo "building DMG..."
