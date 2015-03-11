@@ -112,6 +112,22 @@ module.exports = function (grunt) {
                     }
                 ]
             },
+            "branding": {
+                "files": [
+                    {
+                        "expand": true,
+                        "cwd": "branding/<%= grunt.option('brand') || 'limecraft' %>",
+                        "src": ["appshell.ico", "appshell32.png", "appshell48.png", "appshell128.png", "appshell256.png"],
+                        "dest": "appshell/res/"
+                    },
+                    {
+                        "expand": true,
+                        "cwd": "branding/<%= grunt.option('brand') || 'limecraft' %>",
+                        "src": ["win_install_banner.jpg"],
+                        "dest": "installer/win/"
+                    }
+                ]
+            },
             "win": {
                 "files": [
                     {
