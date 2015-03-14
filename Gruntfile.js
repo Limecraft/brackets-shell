@@ -155,6 +155,15 @@ module.exports = function (grunt) {
                             "*.dll"
                         ],
                         "dest"      : "installer/win/staging/"
+                    },
+                    {
+                        "expand"    : true,
+                        "cwd"       : "Resources/",
+                        "src"       : [
+                            "*.*",
+                            "locales/**"
+                        ],
+                        "dest"      : "installer/win/staging/"
                     }
                 ]
             },
