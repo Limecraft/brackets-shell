@@ -111,6 +111,22 @@ module.exports = function (grunt) {
                     }
                 ]
             },
+            "branding": {
+                "files": [
+                    {
+                        "expand": true,
+                        "cwd": "branding/<%= grunt.option('brand') || 'limecraft' %>",
+                        "src": ["appshell.ico", "appshell32.png", "appshell48.png", "appshell128.png", "appshell256.png"],
+                        "dest": "appshell/res/"
+                    },
+                    {
+                        "expand": true,
+                        "cwd": "branding/<%= grunt.option('brand') || 'limecraft' %>",
+                        "src": ["win_install_banner.jpg"],
+                        "dest": "installer/win/"
+                    }
+                ]
+            },
             "win": {
                 "files": [
                     {
@@ -241,7 +257,7 @@ module.exports = function (grunt) {
             }
         },
         "build": {
-            "name"              : "Field Dock",
+            "name"              : "<%= grunt.config('apply-branding')['brands'][grunt.option('brand') || 'limecraft'].shortName %>",
             "staging"           : staging
         },
         "git": {
@@ -270,6 +286,33 @@ module.exports = function (grunt) {
         },
         "server-project": {
             "repo": "<%=git.server.repo%>"
+        },
+        "apply-branding": {
+            "brands": {
+                "limecraft": {
+                    //short application name
+                    shortName: "Edge",
+
+                    //full application name
+                    fullName: "Limecraft Edge",
+
+                    //background color used for window
+                    background: "RGB(74, 80, 85)",
+
+                    //bundle identifier in mac Info.plist
+                    bundleIdentifier: "com.limecraft.edge.appshell",
+
+                    //manufacturer
+                    manufacturer: "Limecraft"
+                },
+                "fielddock": {
+                    shortName: "Field Dock",
+                    fullName: "Dock10 Field Dock",
+                    background: "RGB(74, 80, 85)",
+                    bundleIdentifier: "com.limecraft.fielddock.appshell",
+                    manufacturer: "Limecraft"
+                }
+            }
         }
     });
 
