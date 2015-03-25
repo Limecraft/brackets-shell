@@ -106,6 +106,7 @@ default="build.mul">
 		              InstallDirDlg.wxs
 		              bracketsharvestmanager.wxs
 		              VerifyReadyDlg.wxs
+		              -arch x64
 		              -ext WixUtilExtension
 		              -dcodepage=1252
 		              -dProductVersionNumber='${product.version.number}'
