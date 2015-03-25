@@ -124,7 +124,6 @@ default="build.mul">
 		                 -ext WixUIExtension
 		                 -ext WixUtilExtension
 		                 -cultures:fr-fr
-		                 -arch x64
 		                 Brackets.wixobj
 		                 bracketsharvestmanager.wixobj
 		                 WixUI_InstallDir.wixobj
