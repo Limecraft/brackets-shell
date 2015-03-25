@@ -17,7 +17,7 @@
 
         <Package Description='!(loc.ProductName)' Comments='Installer for !(loc.ProductName)'
                  Manufacturer='$(var.ProductManufacturer)' InstallerVersion='405' Compressed='yes'
-                 Languages="1033,1036"/>
+                 Languages="1033,1036" Platform="x64" />
 
         <Media Id='1' Cabinet='product.cab' EmbedCab='yes' />
 
@@ -95,7 +95,7 @@
 
         <!--Setup Folder Structure -->
         <Directory Id='TARGETDIR' Name='SourceDir'>
-            <Directory Id='ProgramFilesFolder'>
+            <Directory Id='ProgramFiles64Folder'>
                 <Directory Id='INSTALLDIR' Name='!(loc.ShortProductName)'/>
             </Directory>
             <Directory Id="ProgramMenuFolder"/>
