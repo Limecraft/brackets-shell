@@ -209,7 +209,7 @@ int APIENTRY wWinMain(HINSTANCE hInstance,
 
 	if (!wcslen(szInitialUrl)) {
 		// Look for .\www\index.html next
-		wcscpy(pathRoot, L"\\www\\index.html");
+		wcscpy(pathRoot, L"\\node-core\\assets\\edge-js\\index.html");
 		if (GetFileAttributes(appPath) != INVALID_FILE_ATTRIBUTES) {
 		wcscpy(szInitialUrl, appPath);
 		}
