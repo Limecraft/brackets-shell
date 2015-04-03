@@ -182,7 +182,7 @@ int main(int argc, char* argv[]) {
   
     if (!FileExists(szInitialUrl)) {
       szInitialUrl = AppGetRunningDirectory();
-      szInitialUrl.append("/www/index.html");
+      szInitialUrl.append("/node-core/assets/edge-js/index.html");
   
       if (!FileExists(szInitialUrl)) {
         if (GetInitialUrl() < 0)
