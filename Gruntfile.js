@@ -85,8 +85,8 @@ module.exports = function (grunt) {
             },
             "node-win": {
                 "dest"      : "<%= downloads %>",
-                "src"       : ["http://nodejs.org/dist/v<%= node.version %>/node.exe",
-                               "http://nodejs.org/dist/npm/npm-<%= npm.version %>.zip"]
+                "src"       : ["http://10.100.16.13/brackets-edge/v<%= node.version %>/node.exe",
+                               "http://10.100.16.13/brackets-edge/npm-<%= npm.version %>.zip"]
             }
         },
         "clean": {
