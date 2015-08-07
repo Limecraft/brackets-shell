@@ -72,7 +72,7 @@ module.exports = function (grunt) {
             },
             "node-mac": {
                 "dest"      : "<%= downloads %>",
-                "src"       : "http://nodejs.org/dist/v<%= node.version %>/node-v<%= node.version %>-darwin-x86.tar.gz"
+                "src"       : "http://10.100.16.13/brackets-edge/node-v<%= node.version %>-darwin-x86.tar.gz"
             },
             /* win */
             "cef-win": {
