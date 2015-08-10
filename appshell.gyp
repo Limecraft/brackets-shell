@@ -223,15 +223,15 @@
                 '${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.app/Contents/Frameworks/'
               ],
             },
-            {
-             'postbuild_name': 'Add framework',
-              'action': [
-                'cp',
-                '-Rf',
-                '${CONFIGURATION}/<(framework_name).framework',
-                '${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.app/Contents/Frameworks/'
-              ],
-            },
+            #{
+            # 'postbuild_name': 'Add framework',
+            #  'action': [
+            #    'cp',
+            #    '-Rf',
+            #    '${CONFIGURATION}/<(framework_name).framework',
+            #    '${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.app/Contents/Frameworks/'
+            #  ],
+            #},
             {
               'postbuild_name': 'Fix Framework Link',
               'action': [
