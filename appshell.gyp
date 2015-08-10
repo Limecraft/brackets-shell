@@ -79,8 +79,8 @@
         'GCC_TREAT_WARNINGS_AS_ERRORS': 'NO',
         'GCC_VERSION': 'com.apple.compilers.llvm.clang.1_0',
         # code signing
-        'CODE_SIGN_IDENTITY': 'Developer ID Application',
-        'CODE_SIGN_IDENTITY[sdk=macosx*]': '<(signer)',
+        #'CODE_SIGN_IDENTITY': 'Developer ID Application',
+        #'CODE_SIGN_IDENTITY[sdk=macosx*]': '<(signer)',
         # Necessary to avoid warning "skipping copy phase strip, binary is code signed"
         'COPY_PHASE_STRIP': 'NO',
       },
@@ -203,17 +203,17 @@
           ],
           'postbuilds': [
             # Codesign the CEF framework component
-            {
-              'postbuild_name': 'Codesign CEFramework',
-              'action': [
-                'codesign',
-                '--verbose',
-                '--force',
-                '--sign',
-                '<(signer)',
-                '${BUILT_PRODUCTS_DIR}/${FRAMEWORKS_FOLDER_PATH}/Chromium Embedded Framework.framework'
-              ],
-            },
+            #{
+            #  'postbuild_name': 'Codesign CEFramework',
+            #  'action': [
+            #    'codesign',
+            #    '--verbose',
+            #    '--force',
+            #    '--sign',
+            #    '<(signer)',
+            #    '${BUILT_PRODUCTS_DIR}/${FRAMEWORKS_FOLDER_PATH}/Chromium Embedded Framework.framework'
+            #  ],
+            #},
             {
              'postbuild_name': 'Add framework',
               'action': [
@@ -263,17 +263,17 @@
               ],
             },
             # Codesign the node executable
-            {
-              'postbuild_name': 'Codesign node',
-              'action': [
-                'codesign',
-                '--verbose',
-                '--force',
-                '--sign',
-                '<(signer)',
-                '${BUILT_PRODUCTS_DIR}/${EXECUTABLE_FOLDER_PATH}/node'
-              ],
-            },
+            #{
+            #  'postbuild_name': 'Codesign node',
+            #  'action': [
+            #    'codesign',
+            #    '--verbose',
+            #    '--force',
+            #    '--sign',
+            #    '<(signer)',
+            #    '${BUILT_PRODUCTS_DIR}/${EXECUTABLE_FOLDER_PATH}/node'
+            #  ],
+            #},
             {
               # This postbuid step is responsible for creating the following
               # helpers:
@@ -291,39 +291,39 @@
               ],
             },
             # Codesign the helpers
-            {
-              'postbuild_name': 'Codesign Flow Helper',
-              'action': [
-                'codesign',
-                '--verbose',
-                '--force',
-                '--sign',
-                '<(signer)',
-                '${BUILT_PRODUCTS_DIR}/${FRAMEWORKS_FOLDER_PATH}/Flow Helper.app'
-              ],
-            },
-            {
-              'postbuild_name': 'Codesign Flow Helper EH',
-              'action': [
-                'codesign',
-                '--verbose',
-                '--force',
-                '--sign',
-                '<(signer)',
-                '${BUILT_PRODUCTS_DIR}/${FRAMEWORKS_FOLDER_PATH}/Flow Helper EH.app'
-              ],
-            },
-            {
-              'postbuild_name': 'Codesign Flow Helper NP',
-              'action': [
-                'codesign',
-                '--verbose',
-                '--force',
-                '--sign',
-                '<(signer)',
-                '${BUILT_PRODUCTS_DIR}/${FRAMEWORKS_FOLDER_PATH}/Flow Helper NP.app'
-              ],
-            },
+            #{
+            #  'postbuild_name': 'Codesign Flow Helper',
+            #  'action': [
+            #    'codesign',
+            #    '--verbose',
+            #    '--force',
+            #    '--sign',
+            #    '<(signer)',
+            #    '${BUILT_PRODUCTS_DIR}/${FRAMEWORKS_FOLDER_PATH}/Flow Helper.app'
+            #  ],
+            #},
+            #{
+            #  'postbuild_name': 'Codesign Flow Helper EH',
+            #  'action': [
+            #    'codesign',
+            #    '--verbose',
+            #    '--force',
+            #    '--sign',
+            #    '<(signer)',
+            #    '${BUILT_PRODUCTS_DIR}/${FRAMEWORKS_FOLDER_PATH}/Flow Helper EH.app'
+            #  ],
+            #},
+            #{
+            #  'postbuild_name': 'Codesign Flow Helper NP',
+            #  'action': [
+            #    'codesign',
+            #    '--verbose',
+            #    '--force',
+            #    '--sign',
+            #    '<(signer)',
+            #    '${BUILT_PRODUCTS_DIR}/${FRAMEWORKS_FOLDER_PATH}/Flow Helper NP.app'
+            #  ],
+            #},
           ],
           'link_settings': {
             'libraries': [
@@ -539,8 +539,8 @@
             'GCC_TREAT_WARNINGS_AS_ERRORS': 'NO',
             'GCC_VERSION': 'com.apple.compilers.llvm.clang.1_0',
             # code signing
-            'CODE_SIGN_IDENTITY': 'Developer ID Application',
-            'CODE_SIGN_IDENTITY[sdk=macosx*]': '<(signer)',
+            #'CODE_SIGN_IDENTITY': 'Developer ID Application',
+            #'CODE_SIGN_IDENTITY[sdk=macosx*]': '<(signer)',
             # Necessary to avoid warning "skipping copy phase strip, binary is code signed"
             'COPY_PHASE_STRIP': 'NO',
             'FRAMEWORK_SEARCH_PATHS': [
