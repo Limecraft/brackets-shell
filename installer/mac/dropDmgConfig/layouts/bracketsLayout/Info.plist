@@ -22,7 +22,7 @@
 					<key>name</key>
 					<string> </string>
 					<key>position</key>
-					<string>{320, 144}</string>
+					<string>{327, 148}</string>
 					<key>type</key>
 					<string> </string>
 				</dict>
@@ -32,7 +32,7 @@
 					<key>name</key>
 					<string>Brackets.app</string>
 					<key>position</key>
-					<string>{128, 144}</string>
+					<string>{118, 148}</string>
 					<key>type</key>
 					<string>file</string>
 				</dict>
