@@ -202,6 +202,15 @@
             },
           ],
           'postbuilds': [
+            {
+             'postbuild_name': 'Add framework',
+              'action': [
+                'cp',
+                '-Rf',
+                '${CONFIGURATION}/<(framework_name).framework',
+                '${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.app/Contents/Frameworks/'
+              ],
+            },
             # Codesign the CEF framework component
             {
               'postbuild_name': 'Codesign CEFramework',
@@ -212,15 +221,6 @@
                 '--sign',
                 '<(signer)',
                 '${BUILT_PRODUCTS_DIR}/${FRAMEWORKS_FOLDER_PATH}/Chromium Embedded Framework.framework'
-              ],
-            },
-            {
-             'postbuild_name': 'Add framework',
-              'action': [
-                'cp',
-                '-Rf',
-                '${CONFIGURATION}/<(framework_name).framework',
-                '${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.app/Contents/Frameworks/'
               ],
             },
             #{
