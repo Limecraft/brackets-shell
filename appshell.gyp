@@ -292,36 +292,36 @@
             },
             # Codesign the helpers
             {
-              'postbuild_name': 'Codesign Flow Helper',
+              'postbuild_name': 'Codesign Helper',
               'action': [
                 'codesign',
                 '--verbose',
                 '--force',
                 '--sign',
                 '<(signer)',
-                '${BUILT_PRODUCTS_DIR}/${FRAMEWORKS_FOLDER_PATH}/Flow Helper.app'
+                '${BUILT_PRODUCTS_DIR}/${FRAMEWORKS_FOLDER_PATH}/Edge Helper.app'
               ],
             },
             {
-              'postbuild_name': 'Codesign Flow Helper EH',
+              'postbuild_name': 'Codesign Helper EH',
               'action': [
                 'codesign',
                 '--verbose',
                 '--force',
                 '--sign',
                 '<(signer)',
-                '${BUILT_PRODUCTS_DIR}/${FRAMEWORKS_FOLDER_PATH}/Flow Helper EH.app'
+                '${BUILT_PRODUCTS_DIR}/${FRAMEWORKS_FOLDER_PATH}/Edge Helper EH.app'
               ],
             },
             {
-              'postbuild_name': 'Codesign Flow Helper NP',
+              'postbuild_name': 'Codesign Helper NP',
               'action': [
                 'codesign',
                 '--verbose',
                 '--force',
                 '--sign',
                 '<(signer)',
-                '${BUILT_PRODUCTS_DIR}/${FRAMEWORKS_FOLDER_PATH}/Flow Helper NP.app'
+                '${BUILT_PRODUCTS_DIR}/${FRAMEWORKS_FOLDER_PATH}/Edge Helper NP.app'
               ],
             },
           ],
