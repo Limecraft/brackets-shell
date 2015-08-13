@@ -315,7 +315,7 @@ module.exports = function (grunt) {
                     manufacturer: "Limecraft"
                 },
                 "fielddock": {
-                    shortName: "Field Dock",
+                    shortName: "FieldDock",
                     fullName: "Dock10 Field Dock",
                     background: "RGB(74, 80, 85)",
                     bundleIdentifier: "com.limecraft.fielddock.appshell",
