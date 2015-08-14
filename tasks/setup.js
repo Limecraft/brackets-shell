@@ -463,7 +463,7 @@ module.exports = function (grunt) {
         if (platform === "linux") {
             gypCommand = "bash -c 'python2 gyp/gyp --depth=.'";
         } else {
-            gypCommand = "bash -c 'export GYP_DEFINES=target_arch=x64;gyp/gyp appshell.gyp -I common.gypi --depth=.'";
+            gypCommand = "bash -c 'gyp/gyp appshell.gyp -I common.gypi --depth=.'";
         }
 
         grunt.log.writeln("Building project files");
