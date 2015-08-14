@@ -124,6 +124,12 @@ module.exports = function (grunt) {
                         "cwd": "branding/<%= grunt.option('brand') || 'limecraft' %>",
                         "src": ["win_install_banner.jpg"],
                         "dest": "installer/win/"
+                    },
+                    {
+                        "expand": true,
+                        "cwd": "branding/<%= grunt.option('brand') || 'limecraft' %>",
+                        "src": ["appshell.icns"],
+                        "dest": "appshell/mac/"
                     }
                 ]
             },
