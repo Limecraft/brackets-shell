@@ -299,7 +299,7 @@
                 '--force',
                 '--sign',
                 '<(signer)',
-                '${BUILT_PRODUCTS_DIR}/${FRAMEWORKS_FOLDER_PATH}/Edge Helper.app'
+                '${BUILT_PRODUCTS_DIR}/${FRAMEWORKS_FOLDER_PATH}/<(appname) Helper.app'
               ],
             },
             {
@@ -310,7 +310,7 @@
                 '--force',
                 '--sign',
                 '<(signer)',
-                '${BUILT_PRODUCTS_DIR}/${FRAMEWORKS_FOLDER_PATH}/Edge Helper EH.app'
+                '${BUILT_PRODUCTS_DIR}/${FRAMEWORKS_FOLDER_PATH}/<(appname) Helper EH.app'
               ],
             },
             {
@@ -321,7 +321,7 @@
                 '--force',
                 '--sign',
                 '<(signer)',
-                '${BUILT_PRODUCTS_DIR}/${FRAMEWORKS_FOLDER_PATH}/Edge Helper NP.app'
+                '${BUILT_PRODUCTS_DIR}/${FRAMEWORKS_FOLDER_PATH}/<(appname) Helper NP.app'
               ],
             },
           ],
