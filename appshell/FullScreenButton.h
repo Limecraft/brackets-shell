@@ -23,7 +23,7 @@
 #import <Cocoa/Cocoa.h>
 
 @interface FullScreenButton : NSButton {
-    
+    /*
     NSImage *inactive;
     NSImage *active;
     NSImage *hover;
@@ -32,5 +32,6 @@
     BOOL activeState;
     BOOL hoverState;
     BOOL pressedState;
+    */
 }
 @end

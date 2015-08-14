@@ -23,7 +23,7 @@
 #import <Cocoa/Cocoa.h>
 
 @interface TrafficLightButton : NSButton {
-    
+    /*
     NSImage *inactive;
     NSImage *active;
     NSImage *hover;
@@ -38,5 +38,6 @@
     BOOL pressedState;
     BOOL dirtyState;
     BOOL closeButton;
+    */
 }
 @end
