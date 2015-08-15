@@ -242,6 +242,15 @@
                 '${BUILT_PRODUCTS_DIR}/${EXECUTABLE_PATH}'
               ],
             },
+			{
+              'postbuild_name': 'Add Framework Libraries to RPATH',
+              'action': [
+                'install_name_tool',
+                '-add_rpath',
+                '@executable_path/../Frameworks/<(framework_name).framework/Libraries',
+                '${BUILT_PRODUCTS_DIR}/${EXECUTABLE_PATH}'
+              ],
+            },
             #{
             #  # Copy the entire "node-core" directory into the same location as the "www"
             #  # directory will end up. Note that the ".." in the path is necessary because
@@ -563,6 +572,15 @@
                 '${BUILT_PRODUCTS_DIR}/${EXECUTABLE_PATH}'
               ],
             },
+			{
+              'postbuild_name': 'Add Framework Libraries to RPATH',
+              'action': [
+                'install_name_tool',
+                '-add_rpath',
+                '@executable_path/../../../../Frameworks/<(framework_name).framework/Libraries',
+                '${BUILT_PRODUCTS_DIR}/${EXECUTABLE_PATH}'
+              ],
+            }
           ],
         },  # target appshell_helper_app
       ],
