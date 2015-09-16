@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="Brackets Windows installer" basedir="."  xmlns:antcontrib="antlib:net.sf.antcontrib"
-default="build.mul">
+default="build.english">
 
   <!-- Key locations on disk -->
   <property name="wix.base" value="C:\Program Files (x86)\WiX Toolset v3.7"/>
