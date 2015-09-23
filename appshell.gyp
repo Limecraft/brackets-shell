@@ -78,6 +78,7 @@
         'SYMROOT': 'xcodebuild',
         'GCC_TREAT_WARNINGS_AS_ERRORS': 'NO',
         'GCC_VERSION': 'com.apple.compilers.llvm.clang.1_0',
+		'GCC_ENABLE_CPP_EXCEPTIONS': 'YES',
         # code signing
         'CODE_SIGN_IDENTITY': 'Developer ID Application',
         'CODE_SIGN_IDENTITY[sdk=macosx*]': '<(signer)',
@@ -547,6 +548,7 @@
             'SYMROOT': 'xcodebuild',
             'GCC_TREAT_WARNINGS_AS_ERRORS': 'NO',
             'GCC_VERSION': 'com.apple.compilers.llvm.clang.1_0',
+			'GCC_ENABLE_CPP_EXCEPTIONS': 'YES',
             # code signing
             'CODE_SIGN_IDENTITY': 'Developer ID Application',
             'CODE_SIGN_IDENTITY[sdk=macosx*]': '<(signer)',
