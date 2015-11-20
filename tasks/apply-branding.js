@@ -132,5 +132,21 @@ module.exports = function (grunt) {
             "$1" + brandingConfig.shortName + "$3"
         );
 
+        // 8. Flow in appshell/mac/LANG.lproj/MainMenu.xib
+        safeReplaceFile(
+            "appshell/mac/English.lproj/MainMenu.xib",
+            /(Flow)/g,
+            brandingConfig.fullName
+        );
+        safeReplaceFile(
+            "appshell/mac/French.lproj/MainMenu.xib",
+            /(Flow)/g,
+            brandingConfig.fullName
+        );
+        safeReplaceFile(
+            "appshell/mac/Japanese.lproj/MainMenu.xib",
+            /(Flow)/g,
+            brandingConfig.fullName
+        );
     });
 };
