@@ -46,6 +46,9 @@ static const wchar_t        kPrefRestoreRight[] = L"Restore Right";
 static const wchar_t        kPrefRestoreBottom[]  = L"Restore Bottom";
 static const wchar_t        kPrefShowState[] = L"Show State";
 
+static const wchar_t        kPrefMaxHeightDiff[] = L"Maximized Height Diff";
+static const wchar_t        kPrefMaxWidthDiff[] = L"Maximized Width Diff";
+
 static const long           kMinWindowWidth = 390;
 static const long           kMinWindowHeight = 200;
 
@@ -152,6 +155,33 @@ void cef_main_window::EnsureWindowRectVisibility(int& left, int& top, int& width
     }
 }
 
+void cef_main_window::LoadWindowMaximizeRect(int left, int top, int& width, int& height) {
+
+    RECT war;
+
+    // get the (nearest) monitor that our window will be appearing on 
+    MONITORINFO moninfo;
+    moninfo.cbSize = sizeof(MONITORINFO);
+
+    RECT r;
+    r.left = left; r.top = top; r.bottom = top + height; r.right = left + width;
+
+    HMONITOR mon = MonitorFromRect(&r, MONITOR_DEFAULTTONEAREST);
+    GetMonitorInfo(mon, &moninfo);
+    war = moninfo.rcWork;
+
+    int maxWidthDiff = CW_USEDEFAULT;
+    int maxHeightDiff = CW_USEDEFAULT;
+
+    ::GetRegistryInt(::kWindowPostionFolder, ::kPrefMaxWidthDiff, NULL, maxWidthDiff);
+    ::GetRegistryInt(::kWindowPostionFolder, ::kPrefMaxHeightDiff, NULL, maxHeightDiff);
+
+    if (maxWidthDiff != CW_USEDEFAULT)
+        width = RectWidth(war) + maxWidthDiff;
+    if (maxHeightDiff != CW_USEDEFAULT)
+        height = RectHeight(war) + maxHeightDiff;
+}
+
 
 // Create Method.  Call this to create a cef_main_window instance 
 BOOL cef_main_window::Create() 
@@ -172,8 +202,12 @@ BOOL cef_main_window::Create()
 
     DWORD styles =  WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN | WS_EX_COMPOSITED;
 
-    if (showCmd == SW_MAXIMIZE)
+    if (showCmd == SW_MAXIMIZE) {
       styles |= WS_MAXIMIZE;
+
+      // override values in case we're doing maximized stuff
+      LoadWindowMaximizeRect(left, top, width, height);
+    }
 
     if (!cef_host_window::Create(::kWindowClassname, GetBracketsWindowTitleText(),
                                 styles, left, top, width, height))
@@ -359,6 +393,25 @@ void cef_main_window::SaveWindowRestoreRect()
 
             if (wp.showCmd == SW_MAXIMIZE)
             {
+                RECT wr, war;
+                GetWindowRect(&wr);
+
+                MONITORINFO moninfo;
+                moninfo.cbSize = sizeof(MONITORINFO);
+
+                // Get the monitor on which the windows is currently shown to get an accurate
+                // size for the workspace (i.e., the maximized window size) 
+                // and the actual difference with the window size
+                HMONITOR mon = MonitorFromWindow(mWnd, MONITOR_DEFAULTTONEAREST);
+                GetMonitorInfo(mon, &moninfo);
+                war = moninfo.rcWork;
+
+                int maxWidthDiff = RectWidth(wr) - RectWidth(war);
+                int maxHeightDiff = RectHeight(wr) - RectHeight(war);
+
+                ::WriteRegistryInt(::kWindowPostionFolder, ::kPrefMaxWidthDiff,  maxWidthDiff);
+                ::WriteRegistryInt(::kWindowPostionFolder, ::kPrefMaxHeightDiff, maxHeightDiff);
+
                 // When window is maximized, we also store the "restore" size
                 ::WriteRegistryInt(::kWindowPostionFolder, ::kPrefRestoreLeft,   wp.rcNormalPosition.left);
                 ::WriteRegistryInt(::kWindowPostionFolder, ::kPrefRestoreTop,    wp.rcNormalPosition.top);

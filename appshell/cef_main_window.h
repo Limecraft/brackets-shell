@@ -46,6 +46,7 @@ protected:
     // Initalization - Protected Members
     void SaveWindowRestoreRect();
     void LoadWindowRestoreRect(int& left, int& top, int& width, int& height, int& showCmd);
+    void LoadWindowMaximizeRect(int left, int top, int& width, int& height);
     void RestoreWindowPlacement(int showCmd);
     void EnsureWindowRectVisibility(int& left, int& top, int& width, int& height, int showCmd);
 
