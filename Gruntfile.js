@@ -295,9 +295,6 @@ module.exports = function (grunt) {
         "node": {
             "version"       : "4.1.1"
         },
-        "npm": {
-            "version"       : "3.10.9"
-        },
         "server-project": {
             "repo": "<%=git.server.repo%>"
         },
