@@ -64,7 +64,7 @@ module.exports = function (grunt) {
             /* mac */
             "cef-mac": {
                 "dest"      : "<%= downloads %>",
-                "src"       : "<%= cef.url %>/cef_binary_<%= cef.version %>_macosx32.zip"
+                "src"       : "<%= cef.url %>/cef_binary_<%= cef.version %>_macosx64.zip"
             },
             "cef-mac-symbols": {
                 "src"  : "<%= cef.url %>/cef_binary_<%= cef.version %>_macosx32_release_symbols.zip",
@@ -85,7 +85,8 @@ module.exports = function (grunt) {
             },
             "node-win": {
                 "dest"      : "<%= downloads %>",
-                "src"       : ["http://10.100.16.13/brackets-edge/v<%= node.version %>/node.exe"]
+                "src"       : ["http://10.100.16.13/brackets-edge/v<%= node.version %>/node.exe",
+                               "http://10.100.16.13/brackets-edge/npm-<%= npm.version %>.zip"]
             }
         },
         "clean": {
@@ -294,6 +295,9 @@ module.exports = function (grunt) {
         },
         "node": {
             "version"       : "4.1.1"
+        },
+        "npm": {
+            "version"       : "1.4.12"
         },
         "server-project": {
             "repo": "<%=git.server.repo%>"
