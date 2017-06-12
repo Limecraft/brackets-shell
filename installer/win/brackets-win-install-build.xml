@@ -42,6 +42,7 @@ default="build.english">
       <arg line="Brackets.wxs
 		              WixUI_InstallDir.wxs
 		              VCRedist8.wxs
+		              VCRedist2010_64.wxs
 		              ExitDialog.wxs
 		              UserExit.wxs
 		              ProgressDlg.wxs
@@ -72,6 +73,7 @@ default="build.english">
 		                 bracketsharvestmanager.wixobj
 		                 WixUI_InstallDir.wixobj
 		                 VCRedist8.wixobj
+		                 VCRedist2010_64.wixobj
 		                 ExitDialog.wixobj
 		                 InstallDirDlg.wixobj
 		                 UserExit.wixobj
@@ -98,6 +100,7 @@ default="build.english">
       <arg line="Brackets.wxs
 		              WixUI_InstallDir.wxs
 		              VCRedist8.wxs
+		              VCRedist2010_64.wxs
 		              ExitDialog.wxs
 		              UserExit.wxs
 		              ProgressDlg.wxs
@@ -128,6 +131,7 @@ default="build.english">
 		                 bracketsharvestmanager.wixobj
 		                 WixUI_InstallDir.wixobj
 		                 VCRedist8.wixobj
+		                 VCRedist2010_64.wixobj
 		                 ExitDialog.wixobj
 		                 InstallDirDlg.wixobj
 		                 UserExit.wixobj

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+    Copyright (c) Microsoft Corporation.  All rights reserved.
+
+    The use and distribution terms for this software are covered by the
+    Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
+    which can be found in the file CPL.TXT at the root of this distribution.
+    By using this software in any fashion, you are agreeing to be bound by
+    the terms of this license.
+
+    You must not remove this notice, or any other, from this software.
+-->
+<!--
+VC2010 64bit redist for dependency on 64bit MSVCP100.dll for amtGetMobIds.exe, ffmpeg.exe, ffprobe.exe, MediaInfo.exe, tools/write-verify.exe
+-->
+
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi" xmlns:util='http://schemas.microsoft.com/wix/UtilExtension'>
+    <Fragment>
+
+        <!--
+        refs
+        http://www.xeam-solutions.eu/knowledge-base/wix-toolset-burn/visual-studio-runtime-prerequiste.html
+        http://windows-installer-xml-wix-toolset.687559.n2.nabble.com/Re-VC-redistributable-questions-td6312632.html
+
+        -->
+
+        <!-- Microsoft Visual C++ 2010 Redistributable Package (x64)  -->
+        <Property Id="VC2010REDIST_64" Secure="yes">
+            <RegistrySearch Id="VC2010REDIST_64Value" Root="HKLM"
+                            Key="SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{DA5E371C-6333-3D8A-93A4-6FD5B20BCC6E}"
+                            Name="Publisher" Type="raw" Win64="no" />
+        </Property>
+        <CustomAction Id="Install_2010VCredist.64" Impersonate="yes"
+                      Return="check" Execute="immediate" BinaryKey="vc10Redist_x86.exe"
+                      ExeCommand="/qb"/>
+        <Binary Id="vc10Redist_x86.exe"
+                SourceFile="$(sys.SOURCEFILEDIR)\VC2010REDIST_64.exe"/>
+        <InstallUISequence>
+            <Custom Action="Install_2010VCredist.64"
+                    After="ProgressDlg">Not Installed And Not VC2010REDIST_64</Custom>
+        </InstallUISequence>
+
+
+    </Fragment>
+</Wix>
