@@ -126,6 +126,31 @@
             <MergeRef Id="VCRedist120"/>
         </Feature>
 
+        <!-- also add MSCVRT 64bit merge modules -->
+        <DirectoryRef Id="TARGETDIR">
+            <Merge Id="VCRedist100_64" SourceFile="$(env.CommonProgramFiles)\Merge Modules\Microsoft_VC100_CRT_x64.msm" DiskId="1" Language="0"/>
+        </DirectoryRef>
+
+        <Feature Id="VCRedist100_64" Title="Visual C++ 10 Runtime" AllowAdvertise="no" Display="hidden" Level="1">
+            <MergeRef Id="VCRedist100_64"/>
+        </Feature>
+
+        <DirectoryRef Id="TARGETDIR">
+            <Merge Id="VCRedist110_64" SourceFile="$(env.CommonProgramFiles)\Merge Modules\Microsoft_VC110_CRT_x64.msm" DiskId="1" Language="0"/>
+        </DirectoryRef>
+
+        <Feature Id="VCRedist110_64" Title="Visual C++ 11 Runtime" AllowAdvertise="no" Display="hidden" Level="1">
+            <MergeRef Id="VCRedist110_64"/>
+        </Feature>
+
+        <DirectoryRef Id="TARGETDIR">
+            <Merge Id="VCRedist120_64" SourceFile="$(env.CommonProgramFiles)\Merge Modules\Microsoft_VC120_CRT_x64.msm" DiskId="1" Language="0"/>
+        </DirectoryRef>
+
+        <Feature Id="VCRedist120_64" Title="Visual C++ 12 Runtime" AllowAdvertise="no" Display="hidden" Level="1">
+            <MergeRef Id="VCRedist120_64"/>
+        </Feature>
+
         <!-- Set default install location -->
         <Property Id="WIXUI_INSTALLDIR" Value="INSTALLDIR" />
         <!-- Install Files -->
