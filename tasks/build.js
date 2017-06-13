@@ -193,13 +193,80 @@ module.exports = function (grunt) {
     // task: build-installer-win
     grunt.registerTask("build-installer-win", "Build windows installer", function () {
         var done = this.async();
+        var wixBase = "C:\\Program Files (x86)\\WiX Toolset v3.7";
+        var heatCmd = wixBase + "\\bin\\heat.exe";
+        var candleCmd = wixBase + "\\bin\\candle.exe";
+        var lightCmd = wixBase + "\\bin\\light.exe";
+        var settings = require("installer/win/settings.json");
 
-        spawn(["cmd.exe /c ant.bat -f brackets-win-install-build.xml"], { cwd: resolve("installer/win"), env: getBracketsEnv() }).then(function () {
-            done();
-        }, function (err) {
-            grunt.log.error(err);
-            done(false);
-        });
+        grunt.log.writeln("Building English installer for build " + settings["product.version.name"]);
+        grunt.log.writeln("Generating fileset.");
+        spawn([heatCmd + " dir .\\staging  -cg BRACKETSHARVESTMANAGER -gg -scom -sreg -sfrag -srd -t .\\HeatTransform.xslt -dr INSTALLDIR -out bracketsharvestmanager.wxs"], { cwd: resolve("installer/win"), env: getBracketsEnv() })
+            .then(function () {
+                var candleArgs;
+                candleArgs = [
+                    "Brackets.wxs",
+                    "WixUI_InstallDir.wxs",
+                    "VCRedist8.wxs",
+                    "ExitDialog.wxs",
+                    "UserExit.wxs",
+                    "ProgressDlg.wxs",
+                    "MaintenanceWelcomeDlg.wxs",
+                    "InstallDirDlg.wxs",
+                    "bracketsharvestmanager.wxs",
+                    "VerifyReadyDlg.wxs",
+                    "BrowseDlg.wxs",
+                    "-ext WixUtilExtension",
+                    "-dcodepage=1252",
+                    "-dProductVersionNumber='" + settings["product.version.number"] + "'",
+                    "-dProductVersionName='" + settings["product.version.name"] + "'",
+                    "-dProductManufacturer='" + settings["product.manufacturer"] + "'",
+                    "-dRegistryRoot='" + settings["product.registry.root"] + "'",
+                    "-dExeName='" + settings["product.shortname"] + "'",
+                    "-dIconFile=appicon.ico",
+                    "-dlicenseRtf=License.rtf"
+                ];
+                grunt.log.writeln("Prepping installer source.");
+                return spawn([candleCmd + " " + candleArgs.join(" ")], { cwd: resolve("installer/win"), env: getBracketsEnv() });
+            })
+            .then(function () {
+                var lightArgs;
+                lightArgs = [
+                    "-b .\\staging ",
+                    "-dvar.Version=" + settings["product.version.number"],
+                    "-ext WixUIExtension",
+                    "-ext WixUtilExtension",
+                    "-cultures:en-us",
+                    "Brackets.wixobj",
+                    "bracketsharvestmanager.wixobj",
+                    "WixUI_InstallDir.wixobj",
+                    "VCRedist8.wixobj",
+                    "ExitDialog.wixobj",
+                    "InstallDirDlg.wixobj",
+                    "UserExit.wixobj",
+                    "ProgressDlg.wixobj",
+                    "MaintenanceWelcomeDlg.wixobj",
+                    "BrowseDlg.wixobj",
+                    "VerifyReadyDlg.wixobj",
+                    "-out '" + settings["product.fullname"] + ".msi'",
+                    "-loc Brackets_en-us.wxl"
+                ];
+                grunt.log.writeln("Compiling installer package.");
+                return spawn([lightCmd + " " + lightArgs.join(" ")], { cwd: resolve("installer/win"), env: getBracketsEnv() });
+            })
+            .then(function () {
+                done();
+            }, function (err) {
+                grunt.log.error(err);
+                done(false);
+            });
+
+        // spawn(["cmd.exe /c ant.bat -f brackets-win-install-build.xml"], { cwd: resolve("installer/win"), env: getBracketsEnv() }).then(function () {
+        //     done();
+        // }, function (err) {
+        //     grunt.log.error(err);
+        //     done(false);
+        // });
     });
 
     // task: build-installer-linux
