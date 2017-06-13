@@ -34,7 +34,7 @@ default="build.english">
     <!-- heat, candle, light-->
     <echo message="Generating fileset."/>
     <exec dir="" executable="${heat.cmd}">
-      <arg line="dir ${brackets.staging} -cg BRACKETSHARVESTMANAGER -gg -scom -sreg -sfrag -srd -dr INSTALLDIR -out bracketsharvestmanager.wxs"/>
+      <arg line="dir ${brackets.staging} -cg BRACKETSHARVESTMANAGER -gg -scom -sreg -sfrag -srd -arch x64 -dr INSTALLDIR -out bracketsharvestmanager.wxs"/>
     </exec>
 
     <echo message="Prepping installer source."/>
