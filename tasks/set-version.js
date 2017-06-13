@@ -47,14 +47,25 @@ module.exports = function (grunt) {
             versionRcPath               = "appshell/version.rc",
             infoPlistPath               = "appshell/mac/Info.plist",
             version                      = grunt.option("ver"),
+            versionThreeParts,
+            versionFourParts,
+            versionParts,
             text;
 
         if (!version) {
-            grunt.fail.fatal("Please specify a version. e.g. grunt set-version --ver=0.2.0");
+            grunt.fail.fatal("Please specify a version. e.g. grunt set-version --ver=0.2.0.138");
         }
+
+        versionParts = version.split(".");
+        while (versionParts.length < 4) {
+            versionParts.push("0");
+        }
+        versionThreeParts = versionParts[0] + "." + versionParts[1] + "." + versionParts[2];
+        versionFourParts = versionThreeParts + "." + versionParts[3];
+
         
         // 1. Update package.json
-        packageJSON.version = version;
+        packageJSON.version = versionThreeParts;
         common.writeJSON(packageJsonPath, packageJSON);
         
         // 2. Open installer/win/brackets-win-install-build.xml and change `product.version`
@@ -62,7 +73,7 @@ module.exports = function (grunt) {
         text = safeReplace(
             text,
             /<property name="product\.version" value="([0-9\.]+)"\/>/,
-            '<property name="product.version" value="' + version + '"/>'
+            '<property name="product.version" value="' + versionFourParts + '"/>'
         );
         grunt.file.write(winInstallerBuildXmlPath, text);
         
@@ -71,7 +82,7 @@ module.exports = function (grunt) {
         text = safeReplace(
             text,
             /version="([0-9\.]+)"/,
-            'version="' + version + '"'
+            'version="' + versionFourParts + '"'
         );
         grunt.file.write(buildInstallerScriptPath, text);
         
@@ -79,15 +90,15 @@ module.exports = function (grunt) {
         text = grunt.file.read(versionRcPath);
         text = safeReplace(
             text,
-            /(FILEVERSION\s+)([0-9]+,[0-9]+,[0-9]+)/,
-            "$1" + version.replace(/\./g, ",")
+            /(FILEVERSION\s+)([0-9]+,[0-9]+,[0-9]+,[0-9]+)/,
+            "$1" + versionFourParts.replace(/\./g, ",")
         );
 
         //VALUE "FileVersion",      "0.0.0\0"
         text = safeReplace(
             text,
             /(VALUE\s+"FileVersion",\s+)"[0-9\.]+\\0"/,
-            '$1"' + version + '\\0"'
+            '$1"' + versionFourParts + '\\0"'
         );
 
         grunt.file.write(versionRcPath, text);
@@ -96,13 +107,13 @@ module.exports = function (grunt) {
         text = grunt.file.read(infoPlistPath);
         text = safeReplace(
             text,
-            /(<key>CFBundleVersion<\/key>\s*<string>)([0-9]+\.[0-9]+\.[0-9]+)(<\/string>)/,
-            "$1" + version + "$3"
+            /(<key>CFBundleVersion<\/key>\s*<string>)([0-9\.]+)(\s*<\/string>)/,
+            "$1" + versionFourParts + "$3"
         );
         text = safeReplace(
             text,
-            /(<key>CFBundleShortVersionString<\/key>\s*<string>)([0-9]+\.[0-9]+\.[0-9]+)(<\/string>)/,
-            "$1" + version + "$3"
+            /(<key>CFBundleShortVersionString<\/key>\s*<string>)([0-9\.]+)(\s*<\/string>)/,
+            "$1" + versionFourParts + "$3"
         );
         grunt.file.write(infoPlistPath, text);
     });
