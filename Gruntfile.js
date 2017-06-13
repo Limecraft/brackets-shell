@@ -64,7 +64,7 @@ module.exports = function (grunt) {
             /* mac */
             "cef-mac": {
                 "dest"      : "<%= downloads %>",
-                "src"       : "<%= cef.url %>/cef_binary_<%= cef.version %>_macosx32.zip"
+                "src"       : "<%= cef.url %>/cef_binary_<%= cef.version %>_macosx64.zip"
             },
             "cef-mac-symbols": {
                 "src"  : "<%= cef.url %>/cef_binary_<%= cef.version %>_macosx32_release_symbols.zip",
@@ -72,7 +72,7 @@ module.exports = function (grunt) {
             },
             "node-mac": {
                 "dest"      : "<%= downloads %>",
-                "src"       : "http://nodejs.org/dist/v<%= node.version %>/node-v<%= node.version %>-darwin-x86.tar.gz"
+                "src"       : "http://10.100.16.13/brackets-edge/node-v<%= node.version %>-darwin-x64.tar.gz"
             },
             /* win */
             "cef-win": {
@@ -85,8 +85,8 @@ module.exports = function (grunt) {
             },
             "node-win": {
                 "dest"      : "<%= downloads %>",
-                "src"       : ["http://nodejs.org/dist/v<%= node.version %>/node.exe",
-                               "http://nodejs.org/dist/npm/npm-<%= npm.version %>.zip"]
+                "src"       : ["http://10.100.16.13/brackets-edge/v<%= node.version %>/node.exe",
+                               "http://10.100.16.13/brackets-edge/npm-<%= npm.version %>.zip"]
             }
         },
         "clean": {
@@ -124,6 +124,12 @@ module.exports = function (grunt) {
                         "cwd": "branding/<%= grunt.option('brand') || 'limecraft' %>",
                         "src": ["win_install_banner.jpg"],
                         "dest": "installer/win/"
+                    },
+                    {
+                        "expand": true,
+                        "cwd": "branding/<%= grunt.option('brand') || 'limecraft' %>",
+                        "src": ["appshell.icns"],
+                        "dest": "appshell/mac/"
                     }
                 ]
             },
@@ -288,10 +294,10 @@ module.exports = function (grunt) {
             "version"       : "3.2171.2069"    //"3.2171.1902"
         },
         "node": {
-            "version"       : "0.10.24"
+            "version"       : "4.1.1"
         },
         "npm": {
-            "version"       : "1.3.24"
+            "version"       : "1.4.12"
         },
         "server-project": {
             "repo": "<%=git.server.repo%>"
@@ -315,7 +321,7 @@ module.exports = function (grunt) {
                     manufacturer: "Limecraft"
                 },
                 "fielddock": {
-                    shortName: "Field Dock",
+                    shortName: "FieldDock",
                     fullName: "Dock10 Field Dock",
                     background: "RGB(74, 80, 85)",
                     bundleIdentifier: "com.limecraft.fielddock.appshell",

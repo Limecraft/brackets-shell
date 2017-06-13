@@ -841,7 +841,7 @@ int main(int argc, char* argv[]) {
 
       if (startupUrl == nil) {
         // If the dev file wasn't found, look for /Contents/www/index.html
-        NSString* indexFile = [bundlePath stringByAppendingString:@"/Contents/www/index.html"];
+        NSString* indexFile = [bundlePath stringByAppendingString:@"/Contents/node-core/assets/edge-js/index.html"];
         if ([[NSFileManager defaultManager] fileExistsAtPath:indexFile]) {
           startupUrl = [NSURL fileURLWithPath:indexFile];
         }

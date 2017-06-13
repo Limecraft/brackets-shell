@@ -202,6 +202,15 @@
             },
           ],
           'postbuilds': [
+            {
+             'postbuild_name': 'Add framework',
+              'action': [
+                'cp',
+                '-Rf',
+                '${CONFIGURATION}/<(framework_name).framework',
+                '${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.app/Contents/Frameworks/'
+              ],
+            },
             # Codesign the CEF framework component
             {
               'postbuild_name': 'Codesign CEFramework',
@@ -214,24 +223,15 @@
                 '${BUILT_PRODUCTS_DIR}/${FRAMEWORKS_FOLDER_PATH}/Chromium Embedded Framework.framework'
               ],
             },
-            {
-             'postbuild_name': 'Add framework',
-              'action': [
-                'cp',
-                '-Rf',
-                '${CONFIGURATION}/<(framework_name).framework',
-                '${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.app/Contents/Frameworks/'
-              ],
-            },
-            {
-             'postbuild_name': 'Add framework',
-              'action': [
-                'cp',
-                '-Rf',
-                '${CONFIGURATION}/<(framework_name).framework',
-                '${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.app/Contents/Frameworks/'
-              ],
-            },
+            #{
+            # 'postbuild_name': 'Add framework',
+            #  'action': [
+            #    'cp',
+            #    '-Rf',
+            #    '${CONFIGURATION}/<(framework_name).framework',
+            #    '${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.app/Contents/Frameworks/'
+            #  ],
+            #},
             {
               'postbuild_name': 'Fix Framework Link',
               'action': [
@@ -292,36 +292,36 @@
             },
             # Codesign the helpers
             {
-              'postbuild_name': 'Codesign Flow Helper',
+              'postbuild_name': 'Codesign Helper',
               'action': [
                 'codesign',
                 '--verbose',
                 '--force',
                 '--sign',
                 '<(signer)',
-                '${BUILT_PRODUCTS_DIR}/${FRAMEWORKS_FOLDER_PATH}/Flow Helper.app'
+                '${BUILT_PRODUCTS_DIR}/${FRAMEWORKS_FOLDER_PATH}/<(appname) Helper.app'
               ],
             },
             {
-              'postbuild_name': 'Codesign Flow Helper EH',
+              'postbuild_name': 'Codesign Helper EH',
               'action': [
                 'codesign',
                 '--verbose',
                 '--force',
                 '--sign',
                 '<(signer)',
-                '${BUILT_PRODUCTS_DIR}/${FRAMEWORKS_FOLDER_PATH}/Flow Helper EH.app'
+                '${BUILT_PRODUCTS_DIR}/${FRAMEWORKS_FOLDER_PATH}/<(appname) Helper EH.app'
               ],
             },
             {
-              'postbuild_name': 'Codesign Flow Helper NP',
+              'postbuild_name': 'Codesign Helper NP',
               'action': [
                 'codesign',
                 '--verbose',
                 '--force',
                 '--sign',
                 '<(signer)',
-                '${BUILT_PRODUCTS_DIR}/${FRAMEWORKS_FOLDER_PATH}/Flow Helper NP.app'
+                '${BUILT_PRODUCTS_DIR}/${FRAMEWORKS_FOLDER_PATH}/<(appname) Helper NP.app'
               ],
             },
           ],
