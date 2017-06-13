@@ -197,7 +197,7 @@ module.exports = function (grunt) {
         var heatCmd = wixBase + "\\bin\\heat.exe";
         var candleCmd = wixBase + "\\bin\\candle.exe";
         var lightCmd = wixBase + "\\bin\\light.exe";
-        var settings = require("installer/win/settings.json");
+        var settings = grunt.file.readJSON("installer/win/settings.json");
 
         grunt.log.writeln("Building English installer for build " + settings["product.version.name"]);
         grunt.log.writeln("Generating fileset.");
