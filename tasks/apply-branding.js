@@ -7,6 +7,8 @@
 module.exports = function (grunt) {
     "use strict";
 
+    var common = require("./common")(grunt);
+
     /**
      * Regexp replace with extra check afterwards to see if anything has changed
      *
@@ -46,7 +48,9 @@ module.exports = function (grunt) {
 
     // task: apply-branding
     grunt.registerTask("apply-branding", "Apply branding in images etc.", function () {
-        var brand, config, brandingConfig;
+        var brand, config, brandingConfig,
+            winInstallerSettingsJsonPath = "installer/win/settings.json",
+            winInstallerSettingsJSON    = grunt.file.readJSON(winInstallerSettingsJsonPath);
 
         brand = grunt.option("brand") || "limecraft";
 
@@ -102,6 +106,12 @@ module.exports = function (grunt) {
         );
 
         // 5. product.xxx properties for win installer
+        winInstallerSettingsJSON["product.shortname"] = brandingConfig.shortName;
+        winInstallerSettingsJSON["product.registry.root"] = brandingConfig.shortName;
+        winInstallerSettingsJSON["product.fullname"] = brandingConfig.fullName;
+        winInstallerSettingsJSON["product.manufacturer"] = brandingConfig.manufacturer;
+        common.writeJSON(winInstallerSettingsJsonPath, winInstallerSettingsJSON);
+
         safeReplaceFile(
             "installer/win/brackets-win-install-build.xml",
             /(<property name="product\.shortname" value=")(.*)("\/>)/,

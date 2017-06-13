@@ -46,7 +46,9 @@ module.exports = function (grunt) {
             wxsPath                     = "installer/win/Brackets.wxs",
             versionRcPath               = "appshell/version.rc",
             infoPlistPath               = "appshell/mac/Info.plist",
-            version                      = grunt.option("ver"),
+            version                     = grunt.option("ver"),
+            winInstallerSettingsJsonPath = "installer/win/settings.json",
+            winInstallerSettingsJSON    = grunt.file.readJSON(winInstallerSettingsJsonPath),
             versionThreeParts,
             versionFourParts,
             versionParts,
@@ -67,6 +69,13 @@ module.exports = function (grunt) {
         // 1. Update package.json
         packageJSON.version = versionThreeParts;
         common.writeJSON(packageJsonPath, packageJSON);
+
+        // 2a. win/installer/settings.json
+        winInstallerSettingsJSON["product.version"] = versionFourParts;
+        winInstallerSettingsJSON["product.version.number"] = versionFourParts;
+        winInstallerSettingsJSON["product.version.name"] = versionFourParts;
+        common.writeJSON(winInstallerSettingsJsonPath, winInstallerSettingsJSON);
+
         
         // 2. Open installer/win/brackets-win-install-build.xml and change `product.version`
         text = grunt.file.read(winInstallerBuildXmlPath);
