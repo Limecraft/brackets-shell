@@ -112,22 +112,6 @@ module.exports = function (grunt) {
         winInstallerSettingsJSON["product.manufacturer"] = brandingConfig.manufacturer;
         common.writeJSON(winInstallerSettingsJsonPath, winInstallerSettingsJSON);
 
-        safeReplaceFile(
-            "installer/win/brackets-win-install-build.xml",
-            /(<property name="product\.shortname" value=")(.*)("\/>)/,
-            "$1" + brandingConfig.shortName + "$3"
-        );
-        safeReplaceFile(
-            "installer/win/brackets-win-install-build.xml",
-            /(<property name="product\.fullname" value=")(.*)("\/>)/,
-            "$1" + brandingConfig.fullName + "$3"
-        );
-        safeReplaceFile(
-            "installer/win/brackets-win-install-build.xml",
-            /(<property name="product\.manufacturer" value=")(.*)("\/>)/,
-            "$1" + brandingConfig.manufacturer + "$3"
-        );
-
         // 6. APP_NAME in config.h
         safeReplaceFile(
             "appshell/config.h",

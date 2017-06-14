@@ -46,7 +46,6 @@ module.exports = function (grunt) {
     grunt.registerTask("set-release", "Update occurrences of release number for all native installers and binaries", function () {
         var packageJsonPath             = "package.json",
             packageJSON                 = grunt.file.readJSON(packageJsonPath),
-            winInstallerBuildXmlPath    = "installer/win/brackets-win-install-build.xml",
             buildInstallerScriptPath    = "installer/mac/buildInstaller.sh",
             wxsPath                     = "installer/win/Brackets.wxs",
             versionRcPath               = "appshell/version.rc",
@@ -64,20 +63,6 @@ module.exports = function (grunt) {
         // 1. Update package.json
         packageJSON.version = newVersion.version + "-0";
         common.writeJSON(packageJsonPath, packageJSON);
-
-        // 2. Open installer/win/brackets-win-install-build.xml and change `product.release.number`
-        text = grunt.file.read(winInstallerBuildXmlPath);
-        text = safeReplace(
-            text,
-            /<property name="product\.release\.number\.major" value="(\d+)"\/>/,
-            '<property name="product.release.number.major" value="' + newVersion.major + '"/>'
-        );
-        text = safeReplace(
-            text,
-            /<property name="product\.release\.number\.minor" value="(\d+)"\/>/,
-            '<property name="product.release.number.minor" value="' + newVersion.minor + '"/>'
-        );
-        grunt.file.write(winInstallerBuildXmlPath, text);
 
         // 3. Open installer/mac/buildInstaller.sh and change `dmgName`
         text = grunt.file.read(buildInstallerScriptPath);

@@ -41,7 +41,6 @@ module.exports = function (grunt) {
     grunt.registerTask("set-version", "Update occurrences of sprint number for all native installers and binaries", function () {
         var packageJsonPath             = "package.json",
             packageJSON                 = grunt.file.readJSON(packageJsonPath),
-            winInstallerBuildXmlPath    = "installer/win/brackets-win-install-build.xml",
             buildInstallerScriptPath    = "installer/mac/buildInstaller.sh",
             wxsPath                     = "installer/win/Brackets.wxs",
             versionRcPath               = "appshell/version.rc",
@@ -98,16 +97,6 @@ module.exports = function (grunt) {
         winInstallerSettingsJSON["product.version.name"] = versionFourParts;
         common.writeJSON(winInstallerSettingsJsonPath, winInstallerSettingsJSON);
 
-        
-        // 2. Open installer/win/brackets-win-install-build.xml and change `product.version`
-        text = grunt.file.read(winInstallerBuildXmlPath);
-        text = safeReplace(
-            text,
-            /<property name="product\.version" value="([0-9\.]+)"\/>/,
-            '<property name="product.version" value="' + versionFourParts + '"/>'
-        );
-        grunt.file.write(winInstallerBuildXmlPath, text);
-        
         // 3. Open installer/mac/buildInstaller.sh and change `releaseName`
         text = grunt.file.read(buildInstallerScriptPath);
         text = safeReplace(

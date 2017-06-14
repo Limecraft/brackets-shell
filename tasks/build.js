@@ -282,13 +282,6 @@ module.exports = function (grunt) {
                 grunt.log.error(err);
                 done(false);
             });
-
-        // spawn(["cmd.exe /c ant.bat -f brackets-win-install-build.xml"], { cwd: resolve("installer/win"), env: getBracketsEnv() }).then(function () {
-        //     done();
-        // }, function (err) {
-        //     grunt.log.error(err);
-        //     done(false);
-        // });
     });
 
     // task: build-installer-linux
