@@ -46,23 +46,65 @@ module.exports = function (grunt) {
             wxsPath                     = "installer/win/Brackets.wxs",
             versionRcPath               = "appshell/version.rc",
             infoPlistPath               = "appshell/mac/Info.plist",
-            version                      = grunt.option("ver"),
-            text;
+            version                     = grunt.option("ver"),
+            winInstallerSettingsJsonPath = "installer/win/settings.json",
+            winInstallerSettingsJSON    = grunt.file.readJSON(winInstallerSettingsJsonPath),
+            versionThreeParts,
+            versionFourParts,
+            versionParts,
+            text,
+            winVersionLastPart,
+            patchPart,
+            patchPartStr,
+            lastPart,
+            lastPartStr,
+            winVersion; //wix product version compares only three parts, so create a version with three parts
+                        //but with all the info in it
 
-        if (!version) {
-            grunt.fail.fatal("Please specify a version. e.g. grunt set-version --ver=0.2.0");
+         if (!version) {
+            grunt.fail.fatal("Please specify a version. e.g. grunt set-version --ver=0.2.0.138");
         }
+
+        versionParts = version.split(".");
+        while (versionParts.length < 4) {
+            versionParts.push("0");
+        }
+        versionThreeParts = versionParts[0] + "." + versionParts[1] + "." + versionParts[2];
+        versionFourParts = versionThreeParts + "." + versionParts[3];
+        patchPart = (parseInt(versionParts[2], 10) % 64);
+        patchPartStr = "" + patchPart;
+        while (patchPartStr.length < 2) {
+            patchPartStr = "0" + patchPartStr;
+        }
+        lastPart = parseInt(versionParts[3], 10) % 1000;
+        lastPartStr = ""+ lastPart;
+        while (lastPartStr.length < 3) {
+            lastPartStr = "0" + lastPartStr;
+        }
+        winVersionLastPart =  "" + patchPartStr + lastPartStr;
+        winVersion = versionParts[0] + "." + versionParts[1] + "." + winVersionLastPart;
+        //patch and build can be obtained from winVersion by doing
+        //patch=winVersionLastPart >> 10
+        //build = winVersionLastPart % 1024
         
         // 1. Update package.json
-        packageJSON.version = version;
+        packageJSON.version = versionThreeParts;
         common.writeJSON(packageJsonPath, packageJSON);
+
+        // 2a. win/installer/settings.json
+        winInstallerSettingsJSON["product.version"] = versionFourParts;
+        winInstallerSettingsJSON["product.version.number"] = versionFourParts;
+        winInstallerSettingsJSON["product.windowsVersion"] = winVersion;
+        winInstallerSettingsJSON["product.version.name"] = versionFourParts;
+        common.writeJSON(winInstallerSettingsJsonPath, winInstallerSettingsJSON);
+
         
         // 2. Open installer/win/brackets-win-install-build.xml and change `product.version`
         text = grunt.file.read(winInstallerBuildXmlPath);
         text = safeReplace(
             text,
             /<property name="product\.version" value="([0-9\.]+)"\/>/,
-            '<property name="product.version" value="' + version + '"/>'
+            '<property name="product.version" value="' + versionFourParts + '"/>'
         );
         grunt.file.write(winInstallerBuildXmlPath, text);
         
@@ -71,7 +113,7 @@ module.exports = function (grunt) {
         text = safeReplace(
             text,
             /version="([0-9\.]+)"/,
-            'version="' + version + '"'
+            'version="' + versionFourParts + '"'
         );
         grunt.file.write(buildInstallerScriptPath, text);
         
@@ -79,15 +121,15 @@ module.exports = function (grunt) {
         text = grunt.file.read(versionRcPath);
         text = safeReplace(
             text,
-            /(FILEVERSION\s+)([0-9]+,[0-9]+,[0-9]+)/,
-            "$1" + version.replace(/\./g, ",")
+            /(FILEVERSION\s+)([0-9]+,[0-9]+,[0-9]+,[0-9]+)/,
+            "$1" + versionFourParts.replace(/\./g, ",")
         );
 
         //VALUE "FileVersion",      "0.0.0\0"
         text = safeReplace(
             text,
             /(VALUE\s+"FileVersion",\s+)"[0-9\.]+\\0"/,
-            '$1"' + version + '\\0"'
+            '$1"' + versionFourParts + '\\0"'
         );
 
         grunt.file.write(versionRcPath, text);
@@ -96,13 +138,13 @@ module.exports = function (grunt) {
         text = grunt.file.read(infoPlistPath);
         text = safeReplace(
             text,
-            /(<key>CFBundleVersion<\/key>\s*<string>)([0-9]+\.[0-9]+\.[0-9]+)(<\/string>)/,
-            "$1" + version + "$3"
+            /(<key>CFBundleVersion<\/key>\s*<string>)([0-9\.]+)(\s*<\/string>)/,
+            "$1" + versionFourParts + "$3"
         );
         text = safeReplace(
             text,
-            /(<key>CFBundleShortVersionString<\/key>\s*<string>)([0-9]+\.[0-9]+\.[0-9]+)(<\/string>)/,
-            "$1" + version + "$3"
+            /(<key>CFBundleShortVersionString<\/key>\s*<string>)([0-9\.]+)(\s*<\/string>)/,
+            "$1" + versionFourParts + "$3"
         );
         grunt.file.write(infoPlistPath, text);
     });

@@ -174,7 +174,8 @@ module.exports = function (grunt) {
                 if (child.stdout) {
                     child.stdout.on("data", function (buf) {
                         stdout = Buffer.concat([stdout, new Buffer(buf)]);
-                        grunt.verbose.ok(buf.toString());
+                        // grunt.verbose.ok(buf.toString());
+                        grunt.log.writeln(buf.toString());
                     });
                 }
                 if (child.stderr) {

@@ -193,13 +193,102 @@ module.exports = function (grunt) {
     // task: build-installer-win
     grunt.registerTask("build-installer-win", "Build windows installer", function () {
         var done = this.async();
+        var wixBase = "C:\\Program Files (x86)\\WiX Toolset v3.7";
+        var settings = grunt.file.readJSON("installer/win/settings.json");
+        var theEnv;
+        var workingDir = grunt.option("force-cwd") || resolve("installer/win");
+        theEnv = getBracketsEnv();
 
-        spawn(["cmd.exe /c ant.bat -f brackets-win-install-build.xml"], { cwd: resolve("installer/win"), env: getBracketsEnv() }).then(function () {
-            done();
-        }, function (err) {
-            grunt.log.error(err);
-            done(false);
-        });
+        //add wix tools folder to path so we don't have to spawn a process with spaces
+        // in the path, or all hell brakes loose
+        theEnv.PATH = theEnv.PATH + ";" + wixBase + "\\bin";
+
+        var heatCommandFull;
+
+        grunt.log.writeln("Building English installer for build " + settings["product.version.name"]);
+        grunt.log.writeln("Heat: Generating fileset.");
+        heatCommandFull = "heat.exe dir .\\staging  -cg BRACKETSHARVESTMANAGER -gg -scom -sreg -sfrag -srd -t .\\HeatTransform.xslt -dr INSTALLDIR -out bracketsharvestmanager.wxs";
+        grunt.log.writeln(heatCommandFull);
+        spawn([heatCommandFull], { cwd: workingDir, env: theEnv })
+            .then(function () {
+                var candleArgs, candleCommandFull;
+                candleArgs = [
+                    "Brackets.wxs",
+                    "WixUI_InstallDir.wxs",
+                    "VCRedist8.wxs",
+                    "ExitDialog.wxs",
+                    "UserExit.wxs",
+                    "ProgressDlg.wxs",
+                    "MaintenanceWelcomeDlg.wxs",
+                    "InstallDirDlg.wxs",
+                    "bracketsharvestmanager.wxs",
+                    "VerifyReadyDlg.wxs",
+                    "BrowseDlg.wxs",
+                    "-ext WixUtilExtension",
+                    "-dcodepage=1252",
+                    "-dProductVersionNumber=" + settings["product.windowsVersion"],
+                    "-dProductVersionName=" + settings["product.version.name"] + "",
+                    "-dProductManufacturer=" + settings["product.manufacturer"] + "",
+                    "-dRegistryRoot=" + settings["product.registry.root"] + "",
+                    "-dExeName=" + settings["product.shortname"] + "",
+                    "-dIconFile=appicon.ico",
+                    "-dlicenseRtf=License.rtf"
+                ];
+                grunt.log.writeln("Candle: Prepping installer source.");
+                candleCommandFull = "candle.exe " + candleArgs.join(" ");
+                grunt.log.writeln(candleCommandFull);
+                return spawn([candleCommandFull], { cwd: workingDir, env: theEnv });
+            })
+            .then(function () {
+                var lightArgs;
+                lightArgs = [
+                    "-v",
+                    "-b",
+                    ".\\staging",
+                    "-dvar.Version=" + settings["product.version.number"],
+                    "-ext",
+                    "WixUIExtension",
+                    "-ext",
+                    "WixUtilExtension",
+                    "-cultures:en-us",
+                    "Brackets.wixobj",
+                    "bracketsharvestmanager.wixobj",
+                    "WixUI_InstallDir.wixobj",
+                    "VCRedist8.wixobj",
+                    "ExitDialog.wixobj",
+                    "InstallDirDlg.wixobj",
+                    "UserExit.wixobj",
+                    "ProgressDlg.wixobj",
+                    "MaintenanceWelcomeDlg.wixobj",
+                    "BrowseDlg.wixobj",
+                    "VerifyReadyDlg.wixobj",
+                    "-out",
+                    settings["product.fullname"] + ".msi",
+                    "-loc",
+                    "Brackets_en-us.wxl"
+                ];
+                if (grunt.option('skip-light-validation')) {
+                    lightArgs = [
+                        "-sval"
+                    ].concat(lightArgs);
+                }
+                grunt.log.writeln("Light: Compiling installer package.");
+                grunt.log.writeln("light.exe " + lightArgs.join(" "));
+                return spawn(["light.exe"], { cwd: workingDir, env: theEnv, args: lightArgs });
+            })
+            .then(function () {
+                done();
+            }, function (err) {
+                grunt.log.error(err);
+                done(false);
+            });
+
+        // spawn(["cmd.exe /c ant.bat -f brackets-win-install-build.xml"], { cwd: resolve("installer/win"), env: getBracketsEnv() }).then(function () {
+        //     done();
+        // }, function (err) {
+        //     grunt.log.error(err);
+        //     done(false);
+        // });
     });
 
     // task: build-installer-linux
