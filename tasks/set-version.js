@@ -53,16 +53,11 @@ module.exports = function (grunt) {
             versionFourParts,
             versionParts,
             text,
-            pad4,
+            winVersionLastPart,
             winVersion; //wix product version compares only three parts, so create a version with three parts
                         //but with all the info in it
 
-        pad4 = function (number) {
-            if (number <= 9999) { number = ("000"+number).slice(-4); }
-            return number;
-        }
-
-        if (!version) {
+         if (!version) {
             grunt.fail.fatal("Please specify a version. e.g. grunt set-version --ver=0.2.0.138");
         }
 
@@ -72,8 +67,12 @@ module.exports = function (grunt) {
         }
         versionThreeParts = versionParts[0] + "." + versionParts[1] + "." + versionParts[2];
         versionFourParts = versionThreeParts + "." + versionParts[3];
-        winVersion = versionParts[0] + "." + versionParts[1] + "." + (pad4(parseInt(versionParts[2], 10)) + pad4(versionParts[3], 10));
-
+        winVersionLastPart = (parseInt(versionParts[2], 10) % 64) * 1024;
+        winVersionLastPart =  winVersionLastPart + (parseInt(versionParts[3], 10) % 1024);
+        winVersion = versionParts[0] + "." + versionParts[1] + "." + winVersionLastPart;
+        //patch and build can be obtained from winVersion by doing
+        //patch=winVersionLastPart >> 10
+        //build = winVersionLastPart % 1024
         
         // 1. Update package.json
         packageJSON.version = versionThreeParts;
