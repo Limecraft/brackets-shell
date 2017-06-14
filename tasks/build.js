@@ -202,7 +202,7 @@ module.exports = function (grunt) {
 
         grunt.log.writeln("Building English installer for build " + settings["product.version.name"]);
         grunt.log.writeln("Heat: Generating fileset.");
-        heatCommandFull = heatCmd + " dir .\\staging  -cg BRACKETSHARVESTMANAGER -gg -scom -sreg -sfrag -srd -t .\\HeatTransform.xslt -dr INSTALLDIR -out bracketsharvestmanager.wxs";
+        heatCommandFull = "cmd.exe /c " + heatCmd + " dir .\\staging  -cg BRACKETSHARVESTMANAGER -gg -scom -sreg -sfrag -srd -t .\\HeatTransform.xslt -dr INSTALLDIR -out bracketsharvestmanager.wxs";
         grunt.log.writeln(heatCommandFull);
         spawn([heatCommandFull], { cwd: resolve("installer/win"), env: getBracketsEnv() })
             .then(function () {
@@ -230,7 +230,7 @@ module.exports = function (grunt) {
                     "-dlicenseRtf=License.rtf"
                 ];
                 grunt.log.writeln("Candle: Prepping installer source.");
-                candleCommandFull = candleCmd + " " + candleArgs.join(" ");
+                candleCommandFull = "cmd.exe /c " + candleCmd + " " + candleArgs.join(" ");
                 grunt.log.writeln(candleCommandFull);
                 return spawn([candleCommandFull], { cwd: resolve("installer/win"), env: getBracketsEnv() });
             })
@@ -257,7 +257,7 @@ module.exports = function (grunt) {
                     "-loc Brackets_en-us.wxl"
                 ];
                 grunt.log.writeln("Light: Compiling installer package.");
-                lightCommandFull = lightCmd + " " + lightArgs.join(" ");
+                lightCommandFull = "cmd.exe /c " + lightCmd + " " + lightArgs.join(" ");
                 grunt.log.writeln(lightCommandFull);
                 return spawn([lightCommandFull], { cwd: resolve("installer/win"), env: getBracketsEnv() });
             })
