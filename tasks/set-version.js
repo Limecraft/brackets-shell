@@ -52,7 +52,15 @@ module.exports = function (grunt) {
             versionThreeParts,
             versionFourParts,
             versionParts,
-            text;
+            text,
+            pad4,
+            winVersion; //wix product version compares only three parts, so create a version with three parts
+                        //but with all the info in it
+
+        pad4 = function (number) {
+            if (number <= 9999) { number = ("000"+number).slice(-4); }
+            return number;
+        }
 
         if (!version) {
             grunt.fail.fatal("Please specify a version. e.g. grunt set-version --ver=0.2.0.138");
@@ -64,6 +72,7 @@ module.exports = function (grunt) {
         }
         versionThreeParts = versionParts[0] + "." + versionParts[1] + "." + versionParts[2];
         versionFourParts = versionThreeParts + "." + versionParts[3];
+        winVersion = versionParts[0] + "." + versionParts[1] + "." + (pad4(parseInt(versionParts[2], 10)) + pad4(versionParts[3], 10));
 
         
         // 1. Update package.json
@@ -73,6 +82,7 @@ module.exports = function (grunt) {
         // 2a. win/installer/settings.json
         winInstallerSettingsJSON["product.version"] = versionFourParts;
         winInstallerSettingsJSON["product.version.number"] = versionFourParts;
+        winInstallerSettingsJSON["product.windowsVersion"] = winVersion;
         winInstallerSettingsJSON["product.version.name"] = versionFourParts;
         common.writeJSON(winInstallerSettingsJsonPath, winInstallerSettingsJSON);
 

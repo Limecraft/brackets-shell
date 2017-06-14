@@ -226,7 +226,7 @@ module.exports = function (grunt) {
                     "BrowseDlg.wxs",
                     "-ext WixUtilExtension",
                     "-dcodepage=1252",
-                    "-dProductVersionNumber=" + settings["product.version.number"],
+                    "-dProductVersionNumber=" + settings["product.windowsVersion"],
                     "-dProductVersionName=" + settings["product.version.name"] + "",
                     "-dProductManufacturer=" + settings["product.manufacturer"] + "",
                     "-dRegistryRoot=" + settings["product.registry.root"] + "",
