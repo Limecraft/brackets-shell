@@ -54,6 +54,10 @@ module.exports = function (grunt) {
             versionParts,
             text,
             winVersionLastPart,
+            patchPart,
+            patchPartStr,
+            lastPart,
+            lastPartStr,
             winVersion; //wix product version compares only three parts, so create a version with three parts
                         //but with all the info in it
 
@@ -67,8 +71,17 @@ module.exports = function (grunt) {
         }
         versionThreeParts = versionParts[0] + "." + versionParts[1] + "." + versionParts[2];
         versionFourParts = versionThreeParts + "." + versionParts[3];
-        winVersionLastPart = (parseInt(versionParts[2], 10) % 64) * 1024;
-        winVersionLastPart =  winVersionLastPart + (parseInt(versionParts[3], 10) % 1024);
+        patchPart = (parseInt(versionParts[2], 10) % 64);
+        patchPartStr = "" + patchPart;
+        while (patchPartStr.length < 2) {
+            patchPartStr = "0" + patchPartStr;
+        }
+        lastPart = parseInt(versionParts[3], 10) % 1000;
+        lastPartStr = ""+ lastPart;
+        while (lastPartStr.length < 3) {
+            lastPartStr = "0" + lastPartStr;
+        }
+        winVersionLastPart =  "" + patchPartStr + lastPartStr;
         winVersion = versionParts[0] + "." + versionParts[1] + "." + winVersionLastPart;
         //patch and build can be obtained from winVersion by doing
         //patch=winVersionLastPart >> 10
