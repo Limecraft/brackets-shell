@@ -242,6 +242,7 @@ module.exports = function (grunt) {
             .then(function () {
                 var lightArgs;
                 lightArgs = [
+                    "-v",
                     "-b",
                     ".\\staging",
                     "-dvar.Version=" + settings["product.version.number"],
@@ -266,6 +267,11 @@ module.exports = function (grunt) {
                     "-loc",
                     "Brackets_en-us.wxl"
                 ];
+                if (grunt.option('skip-light-validation')) {
+                    lightArgs = [
+                        "-sval"
+                    ].concat(lightArgs);
+                }
                 grunt.log.writeln("Light: Compiling installer package.");
                 grunt.log.writeln("light.exe " + lightArgs.join(" "));
                 return spawn(["light.exe"], { cwd: workingDir, env: theEnv, args: lightArgs });
