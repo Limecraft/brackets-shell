@@ -194,17 +194,22 @@ module.exports = function (grunt) {
     grunt.registerTask("build-installer-win", "Build windows installer", function () {
         var done = this.async();
         var wixBase = "C:\\Program Files (x86)\\WiX Toolset v3.7";
-        var heatCmd = "\"" + wixBase + "\\bin\\heat.exe\"";
-        var candleCmd = "\"" + wixBase + "\\bin\\candle.exe\"";
-        var lightCmd = "\"" + wixBase + "\\bin\\light.exe\"";
         var settings = grunt.file.readJSON("installer/win/settings.json");
+        var theEnv;
+        var workingDir = grunt.option("force-cwd") || resolve("installer/win");
+        theEnv = getBracketsEnv();
+
+        //add wix tools folder to path so we don't have to spawn a process with spaces
+        // in the path, or all hell brakes loose
+        theEnv.PATH = theEnv.PATH + ";" + wixBase + "\\bin";
+
         var heatCommandFull;
 
         grunt.log.writeln("Building English installer for build " + settings["product.version.name"]);
         grunt.log.writeln("Heat: Generating fileset.");
-        heatCommandFull = "cmd.exe /c " + heatCmd + " dir .\\staging  -cg BRACKETSHARVESTMANAGER -gg -scom -sreg -sfrag -srd -t .\\HeatTransform.xslt -dr INSTALLDIR -out bracketsharvestmanager.wxs";
+        heatCommandFull = "heat.exe dir .\\staging  -cg BRACKETSHARVESTMANAGER -gg -scom -sreg -sfrag -srd -t .\\HeatTransform.xslt -dr INSTALLDIR -out bracketsharvestmanager.wxs";
         grunt.log.writeln(heatCommandFull);
-        spawn([heatCommandFull], { cwd: resolve("installer/win"), env: getBracketsEnv() })
+        spawn([heatCommandFull], { cwd: workingDir, env: theEnv })
             .then(function () {
                 var candleArgs, candleCommandFull;
                 candleArgs = [
@@ -221,26 +226,29 @@ module.exports = function (grunt) {
                     "BrowseDlg.wxs",
                     "-ext WixUtilExtension",
                     "-dcodepage=1252",
-                    "-dProductVersionNumber='" + settings["product.version.number"] + "'",
-                    "-dProductVersionName='" + settings["product.version.name"] + "'",
-                    "-dProductManufacturer='" + settings["product.manufacturer"] + "'",
-                    "-dRegistryRoot='" + settings["product.registry.root"] + "'",
-                    "-dExeName='" + settings["product.shortname"] + "'",
+                    "-dProductVersionNumber=" + settings["product.version.number"],
+                    "-dProductVersionName=" + settings["product.version.name"] + "",
+                    "-dProductManufacturer=" + settings["product.manufacturer"] + "",
+                    "-dRegistryRoot=" + settings["product.registry.root"] + "",
+                    "-dExeName=" + settings["product.shortname"] + "",
                     "-dIconFile=appicon.ico",
                     "-dlicenseRtf=License.rtf"
                 ];
                 grunt.log.writeln("Candle: Prepping installer source.");
-                candleCommandFull = "cmd.exe /c " + candleCmd + " " + candleArgs.join(" ");
+                candleCommandFull = "candle.exe " + candleArgs.join(" ");
                 grunt.log.writeln(candleCommandFull);
-                return spawn([candleCommandFull], { cwd: resolve("installer/win"), env: getBracketsEnv() });
+                return spawn([candleCommandFull], { cwd: workingDir, env: theEnv });
             })
             .then(function () {
-                var lightArgs, lightCommandFull;
+                var lightArgs;
                 lightArgs = [
-                    "-b .\\staging ",
+                    "-b",
+                    ".\\staging",
                     "-dvar.Version=" + settings["product.version.number"],
-                    "-ext WixUIExtension",
-                    "-ext WixUtilExtension",
+                    "-ext",
+                    "WixUIExtension",
+                    "-ext",
+                    "WixUtilExtension",
                     "-cultures:en-us",
                     "Brackets.wixobj",
                     "bracketsharvestmanager.wixobj",
@@ -253,13 +261,14 @@ module.exports = function (grunt) {
                     "MaintenanceWelcomeDlg.wixobj",
                     "BrowseDlg.wixobj",
                     "VerifyReadyDlg.wixobj",
-                    "-out '" + settings["product.fullname"] + ".msi'",
-                    "-loc Brackets_en-us.wxl"
+                    "-out",
+                    settings["product.fullname"] + ".msi",
+                    "-loc",
+                    "Brackets_en-us.wxl"
                 ];
                 grunt.log.writeln("Light: Compiling installer package.");
-                lightCommandFull = "cmd.exe /c " + lightCmd + " " + lightArgs.join(" ");
-                grunt.log.writeln(lightCommandFull);
-                return spawn([lightCommandFull], { cwd: resolve("installer/win"), env: getBracketsEnv() });
+                grunt.log.writeln("light.exe " + lightArgs.join(" "));
+                return spawn(["light.exe"], { cwd: workingDir, env: theEnv, args: lightArgs });
             })
             .then(function () {
                 done();
