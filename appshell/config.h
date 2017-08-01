@@ -37,6 +37,7 @@
 
 // Paths for node resources are relative to the location of the appshell executable
 #define NODE_EXECUTABLE_PATH "node.exe"
+#define NODE_FLAGS "--max-old-space-size=4096"
 #define NODE_CORE_PATH "node-core"
 #define FIRST_INSTANCE_MUTEX_NAME	(APP_NAME L".Shell.Instance")
 #endif
@@ -49,6 +50,7 @@
 
 // Paths for node resources are relative to the bundle path
 #define NODE_EXECUTABLE_PATH @"/Contents/MacOS/node"
+#define NODE_FLAGS "--max-old-space-size=4096"
 #define NODE_CORE_PATH @"/Contents/node-core"
 
 #endif
@@ -60,6 +62,7 @@
 
 // Path for node resources is in dependencies dir and relative to the location of the appshell executable
 #define NODE_EXECUTABLE_PATH "node"
+#define NODE_FLAGS "--max-old-space-size=4096"
 #define NODE_CORE_PATH "node-core"
 
 #endif

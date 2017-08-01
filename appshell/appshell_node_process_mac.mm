@@ -85,7 +85,7 @@
     NSString *appPath = [[NSBundle mainBundle] bundlePath];
     NSString *nodePath = [appPath stringByAppendingString:NODE_EXECUTABLE_PATH];
     NSString *nodeJSPath = [appPath stringByAppendingString:NODE_CORE_PATH];
-    
+
     task = [[NSTask alloc] init];
     [task setStandardOutput: [NSPipe pipe]];
     [task setStandardInput: [NSPipe pipe]];
@@ -104,7 +104,7 @@
     
     [task setLaunchPath: nodePath];
     
-    NSArray *arguments = [NSArray arrayWithObject:nodeJSPath];
+    NSArray *arguments = [NSArray arrayWithObjects:nodeJSPath, NODE_FLAGS];
     [task setArguments: arguments];
     
     // Here we register as an observer of the NSFileHandleReadCompletionNotification, which lets
