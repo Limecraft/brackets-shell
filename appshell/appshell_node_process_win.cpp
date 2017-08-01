@@ -118,7 +118,6 @@ DWORD WINAPI NodeThread(LPVOID lpParam) {
 			HMODULE module = GetModuleHandle(NULL);
 			TCHAR executablePath[MAX_UNC_PATH];
 			TCHAR scriptPath[MAX_UNC_PATH];
-			TCHAR scriptFlags[MAX_UNC_PATH];
 			TCHAR commandLine[BRACKETS_NODE_BUFFER_SIZE];
 
 			DWORD dwFLen = GetModuleFileName(module, executablePath, MAX_UNC_PATH);
