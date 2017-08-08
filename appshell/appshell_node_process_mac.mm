@@ -104,7 +104,7 @@
     
     [task setLaunchPath: nodePath];
     
-    NSArray *arguments = [NSArray arrayWithObjects:nodeJSPath, NODE_FLAGS];
+    NSArray *arguments = [NSArray arrayWithObject:nodeJSPath];
     [task setArguments: arguments];
     
     // Here we register as an observer of the NSFileHandleReadCompletionNotification, which lets
