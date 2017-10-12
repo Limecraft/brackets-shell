@@ -83,7 +83,7 @@ module.exports = function (grunt) {
             "$1" + brandingConfig.bundleIdentifier + "$3"
         );
 
-        // 4. ProductName, ShortProductName in Brackets_en-us.wxl, Brackets_fr-fr.wxl
+        // 4. ProductName, ShortProductName in Brackets_en-us.wxl
         safeReplaceFile(
             "installer/win/Brackets_en-us.wxl",
             /(<String Id="ProductName">)([^<]+)(<\/String>)/,
@@ -91,16 +91,6 @@ module.exports = function (grunt) {
         );
         safeReplaceFile(
             "installer/win/Brackets_en-us.wxl",
-            /(<String Id="ShortProductName">)([^<]+)(<\/String>)/,
-            "$1" + brandingConfig.shortName + "$3"
-        );
-        safeReplaceFile(
-            "installer/win/Brackets_fr-fr.wxl",
-            /(<String Id="ProductName">)([^<]+)(<\/String>)/,
-            "$1" + brandingConfig.fullName + "$3"
-        );
-        safeReplaceFile(
-            "installer/win/Brackets_fr-fr.wxl",
             /(<String Id="ShortProductName">)([^<]+)(<\/String>)/,
             "$1" + brandingConfig.shortName + "$3"
         );
