@@ -17,7 +17,7 @@
 
         <Package Description='!(loc.ProductName)' Comments='Installer for !(loc.ProductName)'
                  Manufacturer='$(var.ProductManufacturer)' InstallerVersion='405' Compressed='yes'
-                 Languages="1033,1036" Platform="x64" />
+                 Languages="1033" Platform="x64" />
 
         <Media Id='1' Cabinet='product.cab' EmbedCab='yes' />
 
