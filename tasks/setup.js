@@ -394,16 +394,11 @@ module.exports = function (grunt) {
 
         var done        = this.async(),
             nodeDest    = grunt.config("nodeDest"),
-            exeFile     = nodeDest[0],
-            npmFile     = nodeDest[1];
-
+            zipFile = grunt.config("nodeDest")[0];
         grunt.file.mkdir("deps/node");
 
-        // copy node.exe to Brackets-node
-        grunt.file.copy(exeFile,  "deps/node/node.exe");
-
         // unzip NPM
-        unzip(npmFile, "deps/node").then(function () {
+        unzip(zipFile, "deps/node").then(function () {
             nodeWriteVersion();
             done();
         }, function (err) {
