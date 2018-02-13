@@ -68,7 +68,7 @@ module.exports = function (grunt) {
 
 		command = "unzip -q \"" + src + "\" -d \"" + dest + "\"";
 		if (platform === "win") {
-			command = "7za x -o" + dest + " " + src;
+			command = "7za x -o" + dest + " " + src + " > tmpoutzip.txt";
 		}
 
 		grunt.log.writeln(command);
