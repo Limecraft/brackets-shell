@@ -394,7 +394,7 @@ module.exports = function (grunt) {
 
         var done        = this.async(),
             nodeDest    = grunt.config("nodeDest"),
-            zipFile = grunt.config("nodeDest")[0];
+            zipFile = grunt.config("nodeDest");
         grunt.file.mkdir("deps/node");
 
         // unzip NPM
