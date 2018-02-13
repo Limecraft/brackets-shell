@@ -398,7 +398,7 @@ module.exports = function (grunt) {
         grunt.file.mkdir("deps/node");
 
         // unzip NPM
-        unzip(zipFile, "deps/node").then(function () {
+        unzip(zipFile, "deps\\node").then(function () {
             nodeWriteVersion();
             done();
         }, function (err) {
