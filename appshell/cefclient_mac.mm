@@ -80,7 +80,7 @@ extern NSMutableArray* pendingOpenFiles;
   if ([event type] == NSKeyDown) {
     // If mainWindow is the first responder then cef isn't the target
     // so let the application event chain handle it intrinsically
-    if ([[self mainWindow] firstResponder] == [self mainWindow] && 
+    if ([[self mainWindow] firstResponder] == [self mainWindow] &&
 	  [event modifierFlags] & NSCommandKeyMask) {
       // We've removed cut, copy, paste from the edit menu,
       // so we handle those shortcuts explicitly.
@@ -288,16 +288,16 @@ extern NSMutableArray* pendingOpenFiles;
     NSWindow* window = [notification object];
 
     if ([self isFullScreenSupported]) {
-        
+
         NSView* themeView = [[window contentView] superview];
         NSRect  parentFrame = [themeView frame];
-        
+
         NSRect oldFrame = [fullScreenButtonView frame];
         NSRect newFrame = NSMakeRect(parentFrame.size.width - oldFrame.size.width - 4,	// x position
                                      parentFrame.size.height - oldFrame.size.height - kTrafficLightsViewY,   // y position
                                      oldFrame.size.width,                                  // width
                                      oldFrame.size.height);
-        
+
         [fullScreenButtonView setFrame:newFrame];
         [themeView setNeedsDisplay:YES];
     }
@@ -317,7 +317,7 @@ extern NSMutableArray* pendingOpenFiles;
     if (customTitlebar) {
         [customTitlebar setHidden:YES];
     }
-    
+
     if ([self needsFullScreenActivateHack]) {
         [NSApp activateIgnoringOtherApps:YES];
         [NSApp unhide:nil];
@@ -333,7 +333,7 @@ extern NSMutableArray* pendingOpenFiles;
     if ([self needsFullScreenActivateHack]) {
         NSWindow* window = [notification object];
         NSView* contentView = [window contentView];
-        
+
         [contentView setNeedsDisplay:YES];
     }
 #endif
@@ -344,7 +344,7 @@ extern NSMutableArray* pendingOpenFiles;
     NSView* themeView = [contentView superview];
     NSRect  parentFrame = [themeView frame];
     NSButton *windowButton = nil;
-    
+
 #ifdef CUSTOM_TRAFFIC_LIGHTS
     if (![self useSystemTrafficLights] && !trafficLightsView) {
         windowButton = [mainWindow standardWindowButton:NSWindowCloseButton];
@@ -353,7 +353,7 @@ extern NSMutableArray* pendingOpenFiles;
         [windowButton setHidden:YES];
         windowButton = [mainWindow standardWindowButton:NSWindowZoomButton];
         [windowButton setHidden:YES];
-        
+
         TrafficLightsViewController     *tvController = [[[TrafficLightsViewController alloc] init] autorelease];
         if ([NSBundle loadNibNamed: @"TrafficLights" owner: tvController])
         {
@@ -367,13 +367,13 @@ extern NSMutableArray* pendingOpenFiles;
             [self setTrafficLightsView:tvController.view];
         }
     }
-    
+
 #endif
 #ifdef DARK_UI
     if ([self isFullScreenSupported] && !fullScreenButtonView) {
         windowButton = [mainWindow standardWindowButton:NSWindowFullScreenButton];
         [windowButton setHidden:YES];
-        
+
         FullScreenViewController     *fsController = [[[FullScreenViewController alloc] init] autorelease];
         if ([NSBundle loadNibNamed: @"FullScreen" owner: fsController])
         {
@@ -388,7 +388,7 @@ extern NSMutableArray* pendingOpenFiles;
         }
     }
 #endif
-    
+
 
 }
 
@@ -455,18 +455,18 @@ extern NSMutableArray* pendingOpenFiles;
         NSRect      bounds = [[contentView superview] bounds];
 
         customTitlebar = [[CustomTitlebarView alloc] initWithFrame:bounds];
-        
+
         [customTitlebar setTitleString: [thisWindow title]];
 
         [customTitlebar setAutoresizingMask:(NSViewWidthSizable | NSViewHeightSizable)];
         [[contentView superview] addSubview:customTitlebar positioned:NSWindowBelow relativeTo:[[[contentView superview] subviews] objectAtIndex:0]];
-        
+
         NSButton    *windowButton = [thisWindow standardWindowButton:NSWindowFullScreenButton];
         [windowButton setHidden:YES];
         isReentering = YES;
     }
 #endif
-    
+
   if (g_handler.get() && g_handler->GetBrowserId()) {
     // Give focus to the browser window.
     g_handler->GetBrowser()->GetHost()->SetFocus(true);
@@ -484,10 +484,10 @@ extern NSMutableArray* pendingOpenFiles;
 // Called when the window is about to close. Perform the self-destruction
 // sequence by getting rid of the window. By returning YES, we allow the window
 // to be removed from the screen.
-- (BOOL)windowShouldClose:(id)window { 
-  
+- (BOOL)windowShouldClose:(id)window {
+
   // This function can be called as many as THREE times for each window.
-  // The first time will dispatch a FILE_CLOSE_WINDOW command and return NO. 
+  // The first time will dispatch a FILE_CLOSE_WINDOW command and return NO.
   // This gives the JavaScript the first crack at handling the command, which may result
   // is a "Save Changes" dialog being shown.
   // If the user chose to save changes (or ignore changes), the JavaScript calls window.close(),
@@ -500,24 +500,24 @@ extern NSMutableArray* pendingOpenFiles;
 
   if (!isReallyClosing && g_handler.get() && g_handler->GetBrowserId()) {
     CefRefPtr<CommandCallback> callback = new CloseWindowCommandCallback(g_handler->GetBrowser());
-    
+
     g_handler->SendJSCommand(g_handler->GetBrowser(), FILE_CLOSE_WINDOW, callback);
     return NO;
   }
-  
+
   // Try to make the window go away.
   [window autorelease];
-  
+
   // Clean ourselves up after clearing the stack of anything that might have the
   // window on it.
   [(NSObject*)[window delegate] performSelectorOnMainThread:@selector(cleanup:)
                                                  withObject:window  waitUntilDone:NO];
-  
+
   return YES;
 }
 
 // Deletes itself.
-- (void)cleanup:(id)window {  
+- (void)cleanup:(id)window {
   [self release];
 }
 
@@ -564,10 +564,10 @@ extern NSMutableArray* pendingOpenFiles;
 - (void)createApp:(id)object {
   [NSApplication sharedApplication];
   [NSBundle loadNibNamed:@"MainMenu" owner:NSApp];
-  
+
   // Set the delegate for application events.
   [NSApp setDelegate:self];
-  
+
   // Create the delegate for control and browser window events.
   [self setDelegate:[[ClientWindowDelegate alloc] init]];
 
@@ -589,7 +589,7 @@ extern NSMutableArray* pendingOpenFiles;
   NSRect screen_rect = [[NSScreen mainScreen] visibleFrame];
   // Start out with the content being as big as possible
   NSRect content_rect = [NSWindow contentRectForFrameRect:screen_rect styleMask:styleMask];
-  
+
   // Determine the maximum height
   const int maxHeight = kWindowHeight;
   // Make the content rect fit into maxHeight and kWindowWidth
@@ -616,17 +616,17 @@ extern NSMutableArray* pendingOpenFiles;
   [mainWnd setMinSize:NSMakeSize(kMinWindowWidth, kMinWindowHeight)];
   [mainWnd setBackgroundColor:fillColor];
 #endif
-    
+
   // "Preclude the window controller from changing a window’s position from the
   // one saved in the defaults system" (NSWindow Class Reference)
   [[mainWnd windowController] setShouldCascadeWindows: NO];
-  
+
   // Set the "autosave" name for the window. If there is a previously stored
   // size for the window, it will be loaded here and used to resize the window.
   // It appears that if the stored size is too big for the screen,
   // it is automatically adjusted to fit.
   [mainWnd setFrameAutosaveName:APP_NAME @"MainWindow"];
-  
+
   // Get the actual content size of the window since setFrameAutosaveName could
   // result in the window size changing.
   content_rect = [mainWnd contentRectForFrameRect:[mainWnd frame]];
@@ -643,11 +643,11 @@ extern NSMutableArray* pendingOpenFiles;
   [mainWnd setReleasedWhenClosed:NO];
 
   NSView* contentView = [mainWnd contentView];
-	
+
   // Create the handler.
   g_handler = new ClientHandler();
   g_handler->SetMainHwnd(contentView);
-	
+
   // Create the browser view.
   CefWindowInfo window_info;
   CefBrowserSettings settings;
@@ -663,17 +663,17 @@ extern NSMutableArray* pendingOpenFiles;
   const char* strCss = "data:text/css;charset=utf-8;base64,aHRtbCxib2R5e2JhY2tncm91bmQ6cmdiYSgxMDksIDExMSwgMTEyLCAxKTt9";
   CefString(&settings.user_style_sheet_location).FromASCII(strCss);
 #endif
-    
-  window_info.SetAsChild(contentView, 0, 0, content_rect.size.width, content_rect.size.height);
-  
 
-    
+  window_info.SetAsChild(contentView, 0, 0, content_rect.size.width, content_rect.size.height);
+
+
+
   NSString* str = [[startupUrl absoluteString] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
   CefBrowserHost::CreateBrowserSync(window_info, g_handler.get(),
                                 [str UTF8String], settings, nil);
- 
+
   [self.delegate initUI:mainWnd];
-    
+
   // Show the window.
   [mainWnd display];
   [mainWnd makeKeyAndOrderFront: nil];
@@ -695,7 +695,7 @@ extern NSMutableArray* pendingOpenFiles;
 - (void)applicationWillTerminate:(NSNotification *)aNotification {
 
   OnBeforeShutdown();
-  
+
   // Shut down CEF.
   g_handler = NULL;
   CefShutdown();
@@ -770,18 +770,18 @@ int main(int argc, char* argv[]) {
   g_autopool = [[NSAutoreleasePool alloc] init];
 
   pendingOpenFiles = [[NSMutableArray alloc] init];
-  
+
   CefMainArgs main_args(argc, argv);
- 
+
   // Delete Special Characters Palette from Edit menu.
   [[NSUserDefaults standardUserDefaults]
     setBool:YES forKey:@"NSDisabledCharacterPaletteMenuItem"];
-    
+
   g_appStartupTime = CFAbsoluteTimeGetCurrent();
 
   // Start the node server process
   startNodeProcess();
-    
+
   CefRefPtr<ClientApp> app(new ClientApp);
 
   // Execute the secondary process, if any.
@@ -806,7 +806,7 @@ int main(int argc, char* argv[]) {
   AppGetSettings(settings, app);
 
   settings.no_sandbox = YES;
-    
+
   // Check command
   if (CefString(&settings.cache_path).length() == 0) {
 	  CefString(&settings.cache_path) = AppGetCachePath();
@@ -819,7 +819,7 @@ int main(int argc, char* argv[]) {
   CGEventRef event = CGEventCreate(NULL);
   CGEventFlags modifiers = CGEventGetFlags(event);
   CFRelease(event);
-  
+
   CefRefPtr<CefCommandLine> cmdLine = AppGetCommandLine();
   if (cmdLine->HasSwitch(cefclient::kStartupPath)) {
     CefString cmdLineStartupURL = cmdLine->GetSwitchValue(cefclient::kStartupPath);
@@ -831,24 +831,24 @@ int main(int argc, char* argv[]) {
     // If the shift key is not pressed, look for index.html bundled in the app package
     if ((modifiers & kCGEventFlagMaskShift) != kCGEventFlagMaskShift) {
       NSString* bundlePath = [[NSBundle mainBundle] bundlePath];
-      
+
       // First, look in our app package for /Contents/dev/src/index.html
       NSString* devFile = [bundlePath stringByAppendingString:@"/Contents/dev/src/index.html"];
-      
+
       if ([[NSFileManager defaultManager] fileExistsAtPath:devFile]) {
         startupUrl = [NSURL fileURLWithPath:devFile];
       }
 
       if (startupUrl == nil) {
         // If the dev file wasn't found, look for /Contents/www/index.html
-        NSString* indexFile = [bundlePath stringByAppendingString:@"/Contents/node-core/assets/edge-js/index.html"];
+        NSString* indexFile = [bundlePath stringByAppendingString:@"/Contents/node-core/node_modules/edge-js/index.html"];
         if ([[NSFileManager defaultManager] fileExistsAtPath:indexFile]) {
           startupUrl = [NSURL fileURLWithPath:indexFile];
         }
       }
     }
   }
-  
+
   if (startupUrl == nil) {
     // If we got here, either the startup file couldn't be found, or the user pressed the
     // shift key while launching. Prompt to select the index.html file.
@@ -863,21 +863,21 @@ int main(int argc, char* argv[]) {
       return 0;
     }
   }
-  
+
   // Create the application delegate and window.
   [delegate performSelectorOnMainThread:@selector(createApp:) withObject:nil
                           waitUntilDone:YES];
 
   // Run the application message loop.
   CefRunMessageLoop();
-    
+
   //if we quit the message loop programatically we need to call
   //terminate now to properly cleanup everything
   if (!g_isTerminating) {
     g_isTerminating = true;
     [NSApp terminate:NULL];
   }
-  
+
   // Don't put anything below this line because it won't be executed.
   return 0;
 }
@@ -891,7 +891,7 @@ std::string AppGetWorkingDirectory() {
 
 CefString AppGetCachePath() {
   std::string cachePath = std::string(ClientApp::AppGetSupportDirectory()) + "/cef_data";
-  
+
   return CefString(cachePath);
 }
 
