@@ -147,7 +147,7 @@ int APIENTRY wWinMain(HINSTANCE hInstance,
 		  ::SetForegroundWindow(hFirstInstanceWnd);
 		  if (::IsIconic(hFirstInstanceWnd))
 			  ::ShowWindow(hFirstInstanceWnd, SW_RESTORE);
-		  
+
 		  // message the other Brackets instance to actually open the given filename
 		  std::wstring wstrFilename = lpCmdLine;
 		  ConvertToUnixPath(wstrFilename);
@@ -187,7 +187,7 @@ int APIENTRY wWinMain(HINSTANCE hInstance,
 	  wcscpy(szInitialUrl, cmdLine->GetSwitchValue(cefclient::kStartupPath).c_str());
   }
   else {
-	// If the shift key is not pressed, look for the index.html file 
+	// If the shift key is not pressed, look for the index.html file
 	if (GetAsyncKeyState(VK_SHIFT) == 0) {
 	// Get the full pathname for the app. We look for the index.html
 	// file relative to this location.
@@ -209,7 +209,7 @@ int APIENTRY wWinMain(HINSTANCE hInstance,
 
 	if (!wcslen(szInitialUrl)) {
 		// Look for .\www\index.html next
-		wcscpy(pathRoot, L"\\node-core\\node_modules\\edge-js\\index.html");
+		wcscpy(pathRoot, L"\\node-core\\node_modules\\edge-js\\dist\\index.html");
 		if (GetFileAttributes(appPath) != INVALID_FILE_ATTRIBUTES) {
 		wcscpy(szInitialUrl, appPath);
 		}
@@ -306,7 +306,7 @@ CefString AppGetCachePath() {
 }
 
 CefString AppGetInitialURL() {
-    return szInitialUrl;    
+    return szInitialUrl;
 }
 
 // Helper function for AppGetProductVersionString. Reads version info from
@@ -346,7 +346,7 @@ void GetFileVersionString(std::wstring &retVersion) {
   delete[] pVersionInfo;
 
   std::wostringstream versionStream(L"");
-  versionStream << major << L"." << minor << L"." << hotfix << L"." << other; 
+  versionStream << major << L"." << minor << L"." << hotfix << L"." << other;
   retVersion = versionStream.str();
 }
 
