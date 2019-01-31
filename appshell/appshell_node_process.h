@@ -30,7 +30,7 @@ static const int BRACKETS_NODE_PORT_NOT_YET_SET = -2;
 static const int BRACKETS_NODE_FAILED           = -3;
 
 // For auto restart, if node ran for less than 5 seconds, do NOT do a restart
-static const int BRACKETS_NODE_AUTO_RESTART_TIMEOUT = INT_MAX; // seconds // karel: used to be 5
+static const int BRACKETS_NODE_AUTO_RESTART_TIMEOUT = 30000; // seconds // karel: used to be 5
 
 // Public interface for interacting with node process. All of these functions below
 // must be implemented in a thread-safe manner if calls to the *public* API happen
