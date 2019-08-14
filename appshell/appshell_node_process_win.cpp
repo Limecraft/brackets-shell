@@ -1,25 +1,25 @@
 /*
 * Copyright (c) 2013 Adobe Systems Incorporated. All rights reserved.
-*  
+*
 * Permission is hereby granted, free of charge, to any person obtaining a
-* copy of this software and associated documentation files (the "Software"), 
-* to deal in the Software without restriction, including without limitation 
-* the rights to use, copy, modify, merge, publish, distribute, sublicense, 
-* and/or sell copies of the Software, and to permit persons to whom the 
+* copy of this software and associated documentation files (the "Software"),
+* to deal in the Software without restriction, including without limitation
+* the rights to use, copy, modify, merge, publish, distribute, sublicense,
+* and/or sell copies of the Software, and to permit persons to whom the
 * Software is furnished to do so, subject to the following conditions:
-*  
+*
 * The above copyright notice and this permission notice shall be included in
 * all copies or substantial portions of the Software.
-*  
+*
 * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-* IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
+* IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-* AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER 
-* LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING 
-* FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
+* AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+* LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+* FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 * DEALINGS IN THE SOFTWARE.
-* 
-*/ 
+*
+*/
 
 #include <windows.h>
 #include <Shlwapi.h>
@@ -93,7 +93,7 @@ DWORD WINAPI NodeReadThread(LPVOID lpParam) {
 	CHAR chBuf[BRACKETS_NODE_BUFFER_SIZE];
 	std::string strBuf("");
 	BOOL bSuccess = FALSE;
-	for (;;) {	
+	for (;;) {
 		bSuccess = ReadFile(g_hChildStd_OUT_Rd, chBuf, BRACKETS_NODE_BUFFER_SIZE, &dwRead, NULL);
 		if( ! bSuccess || dwRead == 0 ) {
 			break;
@@ -101,7 +101,7 @@ DWORD WINAPI NodeReadThread(LPVOID lpParam) {
 			strBuf.assign(chBuf, dwRead);
 			processIncomingData(strBuf);
 		}
-	} 
+	}
 	return 0;
 }
 
@@ -139,20 +139,21 @@ DWORD WINAPI NodeThread(LPVOID lpParam) {
 
 			StringCchCopy(commandLine, BRACKETS_NODE_BUFFER_SIZE, TEXT("\""));
 			StringCchCat(commandLine, BRACKETS_NODE_BUFFER_SIZE, executablePath);
-			StringCchCat(commandLine, BRACKETS_NODE_BUFFER_SIZE, TEXT("\" \""));
-			StringCchCat(commandLine, BRACKETS_NODE_BUFFER_SIZE, scriptPath);
 			StringCchCat(commandLine, BRACKETS_NODE_BUFFER_SIZE, TEXT("\" "));
 			StringCchCat(commandLine, BRACKETS_NODE_BUFFER_SIZE, TEXT(NODE_FLAGS));
+			StringCchCat(commandLine, BRACKETS_NODE_BUFFER_SIZE, TEXT(" \""));
+			StringCchCat(commandLine, BRACKETS_NODE_BUFFER_SIZE, scriptPath);
+			StringCchCat(commandLine, BRACKETS_NODE_BUFFER_SIZE, TEXT("\""));
 
-			SECURITY_ATTRIBUTES saAttr; 
+			SECURITY_ATTRIBUTES saAttr;
 
-			// Set the bInheritHandle flag so pipe handles are inherited. 
+			// Set the bInheritHandle flag so pipe handles are inherited.
 
-			saAttr.nLength = sizeof(SECURITY_ATTRIBUTES); 
-			saAttr.bInheritHandle = TRUE; 
-			saAttr.lpSecurityDescriptor = NULL; 
+			saAttr.nLength = sizeof(SECURITY_ATTRIBUTES);
+			saAttr.bInheritHandle = TRUE;
+			saAttr.lpSecurityDescriptor = NULL;
 
-			// Create a pipe for the child process's STDOUT. 
+			// Create a pipe for the child process's STDOUT.
 			if (!CreatePipe(&g_hChildStd_OUT_Rd, &g_hChildStd_OUT_Wr, &saAttr, 0)) {
 				ReleaseMutex(hNodeMutex);
 				restartNode(false);
@@ -166,50 +167,50 @@ DWORD WINAPI NodeThread(LPVOID lpParam) {
 				return 0;
 			}
 
-			// Create a pipe for the child process's STDIN. 
+			// Create a pipe for the child process's STDIN.
 			if (!CreatePipe(&g_hChildStd_IN_Rd, &g_hChildStd_IN_Wr, &saAttr, 0)) {
 				ReleaseMutex(hNodeMutex);
 				restartNode(false);
 				return 0;
 			}
 
-			// Ensure the write handle to the pipe for STDIN is not inherited. 
+			// Ensure the write handle to the pipe for STDIN is not inherited.
 			if (!SetHandleInformation(g_hChildStd_IN_Wr, HANDLE_FLAG_INHERIT, 0)) {
 				ReleaseMutex(hNodeMutex);
 				restartNode(false);
-				return 0; 
+				return 0;
 			}
 
 			// Create the child process.
- 
-			STARTUPINFO siStartInfo;
-			BOOL bSuccess = FALSE; 
 
-			// Set up members of the PROCESS_INFORMATION structure. 
+			STARTUPINFO siStartInfo;
+			BOOL bSuccess = FALSE;
+
+			// Set up members of the PROCESS_INFORMATION structure.
 			ZeroMemory(&piProcInfo, sizeof(PROCESS_INFORMATION));
 
-			// Set up members of the STARTUPINFO structure. 
+			// Set up members of the STARTUPINFO structure.
 			// This structure specifies the STDIN and STDOUT handles for redirection.
 
 			ZeroMemory(&siStartInfo, sizeof(STARTUPINFO));
-			siStartInfo.cb = sizeof(STARTUPINFO); 
+			siStartInfo.cb = sizeof(STARTUPINFO);
 			siStartInfo.hStdError = g_hChildStd_OUT_Wr;
 			siStartInfo.hStdOutput = g_hChildStd_OUT_Wr;
 			siStartInfo.hStdInput = g_hChildStd_IN_Rd;
 			siStartInfo.dwFlags |= STARTF_USESTDHANDLES;
 
-			// Create the child process. 
+			// Create the child process.
 
-			bSuccess = CreateProcess(NULL, 
-				commandLine,       // command line 
-				NULL,              // process security attributes 
-				NULL,              // primary thread security attributes 
-				TRUE,              // handles are inherited 
-				CREATE_NO_WINDOW,  // creation flags (change to 0 to see a window for the launched process) 
-				NULL,              // use parent's environment 
-				NULL,              // use parent's current directory 
-				&siStartInfo,      // STARTUPINFO pointer 
-				&piProcInfo);      // receives PROCESS_INFORMATION 
+			bSuccess = CreateProcess(NULL,
+				commandLine,       // command line
+				NULL,              // process security attributes
+				NULL,              // primary thread security attributes
+				TRUE,              // handles are inherited
+				CREATE_NO_WINDOW,  // creation flags (change to 0 to see a window for the launched process)
+				NULL,              // use parent's environment
+				NULL,              // use parent's current directory
+				&siStartInfo,      // STARTUPINFO pointer
+				&piProcInfo);      // receives PROCESS_INFORMATION
 
 			nodeState = BRACKETS_NODE_PORT_NOT_YET_SET;
 
@@ -227,8 +228,8 @@ DWORD WINAPI NodeThread(LPVOID lpParam) {
 				// Loop to check if process is still running
 				BOOL bSuccess = FALSE;
 				DWORD exitCode = 0;
-				for (;;) 
-				{	
+				for (;;)
+				{
 					bSuccess = GetExitCodeProcess(piProcInfo.hProcess, &exitCode);
 					if (bSuccess && exitCode != STILL_ACTIVE) {
 						TerminateThread(hNodeReadThread, 0);
@@ -236,8 +237,8 @@ DWORD WINAPI NodeThread(LPVOID lpParam) {
 					} else {
 						Sleep(1000);
 					}
-				} 
-				
+				}
+
 				// If we broke out of this loop, the node process has terminated
 				// So, we should try to restart.
 				restartNode(false);
@@ -275,11 +276,11 @@ void restartNode(bool terminateCurrentProcess) {
 			// we hold mutex, so okay to set this directly instead of
 			// calling setNodeState
 			nodeState = BRACKETS_NODE_NOT_YET_STARTED;
-			
+
 			// Then, check if we were running long enough to restart
 			DWORD now = timeGetTime();
 			shouldRestart = (now - nodeStartTime > (BRACKETS_NODE_AUTO_RESTART_TIMEOUT * 1000));
-			
+
 			// Need to release the mutex before possibly restarting,
 			// since startNodePorcess wants the mutex
 			ReleaseMutex(hNodeMutex);
@@ -290,11 +291,11 @@ void restartNode(bool terminateCurrentProcess) {
 			} else {
 				// Didn't run long enough
 				setNodeState(BRACKETS_NODE_FAILED);
-			}			
+			}
 
 		}
 	}
-	
+
 }
 
 // Sends data to the node process. If the write fails completely,
@@ -324,15 +325,15 @@ void sendData(const std::string &data) {
 	// problem with the node process, so we simply drop the data.
 }
 
-// Thread-safe way to access nodeState variable 
+// Thread-safe way to access nodeState variable
 int getNodeState() {
 	// The very first thing we do when starting Node is create a mutex.
 	// So, if that mutex doesn't exist, we haven't started.
 	int result = BRACKETS_NODE_NOT_YET_STARTED;
-	
+
 	if (hNodeMutex != NULL) {
-		// if there was a mutex and we don't get it, then something is 
-		// seriously wrong, so set a default response of BRACKETS_NODE_FAILED 
+		// if there was a mutex and we don't get it, then something is
+		// seriously wrong, so set a default response of BRACKETS_NODE_FAILED
 		result = BRACKETS_NODE_FAILED;
 
 		DWORD dwWaitResult;
